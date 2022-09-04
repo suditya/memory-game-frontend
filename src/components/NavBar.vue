@@ -15,18 +15,35 @@
         </router-link>
       </div> -->
       <div class="right list-unstyled">
-        <div v-if="this.fullName" id="hello-user">hello! 👋{{  this.fullName  }}{{  this.emoji  }}</div>
+        <div v-if="this.fullName" id="hello-user">hello! 👋{{ this.fullName }}{{ this.emoji }}</div>
         <!-- <div  id="hello-user">hello 😉{{localStorage.getItem('userName')}}👋!</div> -->
         <router-link to="/register" class="link-plain right-item" style="margin-right:30px">
           <div>Register</div>
         </router-link>
         <div v-if="loggedIn == true" @click="logout" id="log-out">Logout</div>
         <div v-else @click="loginRedirect" id="log-in">Login</div>
+        <div v-if="loggedIn == true">
+          <img class="account-image" src="../assets/images/icons8-account-48.png"
+            @click="accountDropdown = (1^accountDropdown)">
+          <div v-show="accountDropdown==true" class="account-dropdown">
+            <div class="account-delete" v-show="accountEdit==true">
+              <h1>Do you really want gto delete your account</h1>
+              <p>You will loose all your data</p>
+              <div class="buttons">
+                <button class="yes">Yes Delete</button>
+                <button class="no">Don't Delete</button>
+              </div>
+            </div>
+            <div class="update-account">
+              update account
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="ham-container">
       <div class="ham-menu-heading">
-        <h3 v-show="this.fullName" >hello {{  this.fullName  }}{{  this.emoji  }}</h3>
+        <h3 v-show="this.fullName">👋{{ this.fullName }}{{ this.emoji }}</h3>
       </div>
       <div class="hamburger-menu" @click="hamContent = (1^hamContent)">
         <a href="#">
@@ -45,48 +62,14 @@
       <router-link to="/leaderboard" class="nav-link">
         LeaderBoard
       </router-link>
-     
+
       <!-- <div  id="hello-user">hello 😉{{localStorage.getItem('userName')}}👋!</div> -->
       <router-link to="/register" class="nav-link">
         Register
       </router-link>
       <span v-if="loggedIn == true" @click="logout">Logout</span>
-      <span v-else @click="loginRedirect">Login</span>
+      <span @click="loginRedirect">Login</span>
     </div>
-    <!-- <nav  class="tabNav" role="navigation">
-      <div id="menuToggle"> -->
-    <!--
-    A fake / hidden checkbox is used as click reciever,
-    so you can use the :checked selector on it.
-    -->
-    <!-- <input type="checkbox" />
-        <span></span>
-        <span></span>
-        <span></span> -->
-
-    <!--
-    Too bad the menu has to be inside of the button
-    but hey, it's pure CSS magic.
-    -->
-    <!-- <ul id="menu">
-          <a href="#">
-            <li>Home</li>
-          </a>
-          <a href="#">
-            <li>About</li>
-          </a>
-          <a href="#">
-            <li>Info</li>
-          </a>
-          <a href="#">
-            <li>Contact</li>
-          </a>
-          <a href="https://erikterwan.com/" target="_blank">
-            <li>Show me more</li>
-          </a>
-        </ul>
-      </div>
-    </nav> -->
   </div>
 </template>
 <!-- background-color: lightcoral ; color: white; -->
@@ -100,7 +83,9 @@ export default {
       fullName: "",
       loggedIn: false,
       emoji: "",
-      hamContent:false
+      hamContent:false,
+      accountDropdown:false,
+      accountEdit:false
     };
   },
   methods: {
@@ -191,20 +176,14 @@ export default {
   padding: 0px 10px;
 }
 
-.left a,
-.right a {}
-
-.left a:hover,
-.right a:hover {
-  /* display: block; */
+.account-image {
+  border-radius: 29px;
+  height: 42px;
+  margin-left: 20px;
+  background-color: white;
+  cursor: pointer;
 
 }
-
-.links {}
-
-.links a {}
-
-.heading {}
 
 .ham-menu-icon {
   width: 35px;
@@ -257,17 +236,66 @@ export default {
   border: 2px solid;
 }
 
+.account-dropdown {
+  top: 9%;
+  background-color: white;
+  z-index: 1000;
+  border-radius: 3px;
+  text-align: center;
+  /* border: 1px solid grey; */
+  padding: 0px 0px;
+  /* right: 0%; */
+  display: flex;
+  flex-direction: column-reverse;
+  flex-wrap: wrap;
+  position: absolute;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  transition: all .4s;
+}
+
+.update-account,
+.delete-account {
+  background-color: dimgrey;
+  color: white;
+  cursor: pointer;
+}
+
+.delete-account:hover {
+  background-color: red;
+}
+
+.update-account:hover {
+  background-color: #69b37c;
+}
+
 @media only screen and (max-width:880px) {
 
   .nav-close-button {
+    font-weight: 900;
     position: relative;
     top: -10%;
     border: none;
-    font-size: 46px;
-    right: -39%;
+    font-size: 53px;
+    /* background-color: #00ff88; */
+    right: -34%;
     background-color: white;
     transition: all .4s ease-in-out;
   }
+
+  .nav-close-button:hover {
+    font-size: 47px;
+    padding: 0px 25px;
+    border-radius: 53px;
+    /* border: 1px solid white; */
+    /* border: none; */
+    top: -8%;
+    background-color: #49505712;
+    right: -33%;
+    transition: all .4s ease-in-out;
+  }
+
   .start-button {
     width: 35%;
   }
@@ -330,142 +358,53 @@ export default {
 
   .hamburger-menu {
     position: absolute;
-    top: 19px;
+    /* top: 19px; */
     /* right: 8px; */
     display: flex;
     /* border: 1px solid grey; */
     padding: 6px 21px;
     transition: all .4s ease-in-out;
-    /* /* border-radius: 6px; */
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
   }
 
-  #menuToggle {
-    display: block;
-    position: absolute;
-    top: 15px;
-    left: 23px;
-    background-color: #080808;
-    z-index: 1;
-    user-select: none;
-  }
+  .account-delete {
+  
+  position: absolute;
+  top: 42%;
+  height: 27%;
+  left: 14%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 2px;
+  background-color: antiquewhite;
+  z-index: 1000;
+  border-radius: 22px;
+  width: 72%;
+  text-align: center;
+  margin: 0 auto;
 
-  #menuToggle a {
-    text-decoration: none;
-    color: #232323;
+}
 
-    transition: color 0.3s ease;
-  }
+.yes {
+  cursor: pointer;
+  margin-right: 60px;
+  padding: 13px;
+  border: 1px;
+  border-radius: 21px;
+}
+.no
+{
+  cursor: pointer;
+  padding: 13px;
+  border: 1px;
+  border-radius: 21px;
+}
 
-  #menuToggle a:hover {
-    color: tomato;
-  }
 
-
-  #menuToggle input {
-    display: block;
-    width: 40px;
-    height: 32px;
-    position: absolute;
-    top: -7px;
-    left: -5px;
-
-    cursor: pointer;
-
-    opacity: 0;
-    /* hide this */
-    z-index: 2;
-    /* and place it over the hamburger */
-
-    -webkit-touch-callout: none;
-  }
-
-  /*
- * Just a quick hamburger
- */
-  #menuToggle span {
-    display: block;
-    width: 33px;
-    height: 4px;
-    margin-bottom: 5px;
-    position: relative;
-
-    background: #cdcdcd;
-    border-radius: 3px;
-
-    z-index: 1;
-
-    transform-origin: 4px 0px;
-
-    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
-      background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
-      opacity 0.55s ease;
-  }
-
-  #menuToggle span:first-child {
-    transform-origin: 0% 0%;
-  }
-
-  #menuToggle span:nth-last-child(2) {
-    transform-origin: 0% 100%;
-  }
-
-  /* 
- * Transform all the slices of hamburger
- * into a crossmark.
- */
-  #menuToggle input:checked~span {
-    opacity: 1;
-    transform: rotate(45deg) translate(-2px, -1px);
-    background: #232323;
-  }
-
-  /*
- * But let's hide the middle one.
- */
-  #menuToggle input:checked~span:nth-last-child(3) {
-    opacity: 0;
-    transform: rotate(0deg) scale(0.2, 0.2);
-  }
-
-  /*
- * Ohyeah and the last one should go the other direction
- */
-  #menuToggle input:checked~span:nth-last-child(2) {
-    transform: rotate(-45deg) translate(0, -1px);
-  }
-
-  /*
- * Make this absolute positioned
- * at the top left of the screen
- */
-  #menu {
-    position: absolute;
-    width: 300px;
-    margin: -100px 0 0 -50px;
-    padding: 50px;
-    padding-top: 125px;
-
-    background: #ededed;
-    list-style-type: none;
-    -webkit-font-smoothing: antialiased;
-    /* to stop flickering of text in safari */
-
-    transform-origin: 0% 0%;
-    transform: translate(-100%, 0);
-
-    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
-  }
-
-  #menu li {
-    padding: 10px 0;
-    font-size: 22px;
-  }
-
-  /*
- * And let's slide it in from the left
- */
-  #menuToggle input:checked~ul {
-    transform: none;
-  }
 }
 </style>

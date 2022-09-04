@@ -1,5 +1,6 @@
 <template>
     <div>
+        
         <NavBar />
         <div id="login">
             <!-- <MemoryCardGameHeader /> -->
@@ -58,6 +59,7 @@
 // import config from "@/config";
 import axios from "axios";
 import NavBar from './NavBar.vue';
+// import AccountDelete from "./AccountDelete.vue";
 export default {
     name: "loginPage",
     data() {
@@ -164,7 +166,7 @@ export default {
         }
     },
 
-    components: { NavBar }
+    components: { NavBar}
 };
 </script>
 <style scoped>

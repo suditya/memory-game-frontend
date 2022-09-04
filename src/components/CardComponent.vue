@@ -59,7 +59,7 @@
         <div v-show="showWindow == true" id="win-screen" class="">
             <h3>🎯 Nailed It! 🎯</h3>
             <button @click.prevent="closeWindow()" class="close-button">X</button>
-            <div class="score click-count">Low Score: {{  this.turns  }}</div>
+            <div class="score click-count">Your Score: {{  this.turns  }}</div>
             <div class="score low-score">Time: {{  this.totalTime.minutes  }} : {{  this.totalTime.seconds  }}</div>
             <div @click="reset()" id="replay-button">Play Again?</div>
         </div>
@@ -285,6 +285,7 @@ export default {
                 this.start = false;
                 this.finish = false;
                 this.turns = 0;
+                this.showWindow=false
                 this.flippedCards = [];
             }, 800);
         },
