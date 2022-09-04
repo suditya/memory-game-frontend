@@ -5,12 +5,12 @@
             <!-- <MemoryCardGameHeader /> -->
             <h1 class="heading">Register </h1>
             <form @submit.prevent="register()" class="form-container">
-                
+
                 <hr>
                 <div v-show="errorShow == true" class="popup-msg">
                     <!-- <button @click.prevent="closePopup" class="close">X</button> -->
                     <h2>Registration Failed</h2>
-                    <p>{{  this.error  }}</p>
+                    <p>{{ this.error }}</p>
                 </div>
                 <div v-show="successShow == true" class="success-msg">
                     <h2>✅ Registration Succesfull</h2>
@@ -44,15 +44,15 @@
                     <input :required="true" class="passInput" type="password" name="password" v-model="password"
                         placeholder="password">
 
-                    <p class="validations" v-show="this.password.length < 8"> password is too short make it atleast
-                        <b>8 characters</b>
-                    </p>
-                    <p class="validations" v-show="!(this.upperCharRegEx.test(this.password))"> password should contain
-                        atleast <b>1 upper case</b> character</p>
-                    <p class="validations" v-show="!(this.lowerCharRegEx.test(this.password))"> password should contain
-                        atleast <b>1 lower case</b> character</p>
-                    <p class="validations" v-show="!(this.numberRegEx.test(this.password))"> password should contain
-                        atleast <b>1 number</b> </p>
+                    <span class="validations" v-show="checkInvalidPass == true">
+                        Password should contain atleast
+                        <span v-show="this.password.length < 8">8 characters</span>
+                        <span v-show="!(this.upperCharRegEx.test(this.password))"> 1 upper case character,</span>
+                        <span v-show="!(this.lowerCharRegEx.test(this.password))"> 1 lower case character,</span>
+                        <span v-show="!(this.numberRegEx.test(this.password))"> 1 number</span>
+                    </span>
+                    <span class="validPass" v-show="password.length > 0 && !(checkInvalidPass)">Password is valid</span>
+                    
                 </div>
                 <div class="password input">
                     <label for="password">
@@ -60,7 +60,7 @@
                     </label>
                     <input :required="true" class="passInput" type="password" name="password" v-model="confirmPassword"
                         placeholder="confirm password">
-                    <p class="validations" v-show="!(this.password == this.confirmPassword)"> confirm password is not
+                    <p class="validations" v-show="!(this.password == this.confirmPassword) &&(this.password.length>0)"> confirm password is not
                         matching with password </p>
                 </div>
                 <label for="country">
@@ -68,11 +68,9 @@
                 </label>
                 <select name="" class="flags" :required="true" v-model="choosenCountry">
                     <option class="countryInput" v-for="(country, index) in countries " :key="index">
-                        {{  country.name  }}|{{  country.emoji  }} </option>
+                        {{ country.name }}|{{ country.emoji }} </option>
                 </select>
 
-
-                <!-- <div>{{choosenCountry}}</div> -->
                 <input class="submitInput" id="submit" type="submit" value="register">
                 <p class="bottom">
                     Already have an account?
@@ -86,9 +84,7 @@
     </div>
 </template>
 <script>
-// import MemoryCardGameHeader from './MemoryCardGameHeader.vue';
-// import MemoryCardGameHeader from './MemoryCardGameHeader.vue';
-// import config from "@/config";
+
 import axios from "axios";
 import NavBar from './NavBar.vue';
 import * as nations from '../data/flags.json'
@@ -113,7 +109,10 @@ export default {
             numberRegEx: /[0-9]+/,
             error: "",
             successShow: false,
-            errorShow: false
+            errorShow: false,
+            validPass: true,
+            invalidPass: false,
+            notValidPass: true
         };
     },
     methods: {
@@ -127,7 +126,7 @@ export default {
             }, 2500)
         },
         async register() {
-            console.log(this.choosenCountry)
+            
             const emoji = this.choosenCountry.split('|');
             // console.log(emoji), " emoji of the nation ";
             const credentials = {
@@ -136,7 +135,7 @@ export default {
                 password: this.password,
                 countryEmoji: emoji[1]
             };
-            console.log("credentials:", credentials);
+            
             try {
                 const result = await axios.post(
                     `${process.env.VUE_APP_BASE_URL}/user/register`,
@@ -161,10 +160,9 @@ export default {
                     }, 2000);
                     localStorage.removeItem('userName');
                     localStorage.removeItem('countryEmoji');
-                    setTimeout(()=>
-                    {
+                    setTimeout(() => {
                         this.$router.push({ path: "/login" });
-                    },1500)
+                    }, 1500)
 
 
                 }
@@ -176,7 +174,17 @@ export default {
 
         },
     },
-    components: { NavBar }
+    components: { NavBar },
+    computed: {
+        checkInvalidPass() {
+            if (this.password.length == 0) return false;
+            let invalidPass = this.password.length < 8 || (!(this.upperCharRegEx.test(this.password))) || (this.lowerCharRegEx.test(this.password)) || !(this.lowerCharRegEx.test(this.password)) || !(this.numberRegEx.test(this.password));
+            console.log(this.invalidPass, "invalid password");
+
+            return invalidPass;
+
+        }
+    }
 };
 </script>
 <style scoped>
@@ -186,7 +194,8 @@ export default {
     padding: 0;
 }
 
-.popup-msg,.success-msg {
+.popup-msg,
+.success-msg {
     width: 39%;
     padding: 20px 27px;
     position: absolute;
@@ -202,15 +211,16 @@ export default {
 }
 
 .success-msg {
-    
+
     background-color: #DFF2BF;
     color: #270;
 }
-.popup-msg
-{
+
+.popup-msg {
     color: #D8000C;
     background-color: #FFBABA;
 }
+
 .validations {
     color: red;
     text-align: center;
@@ -299,6 +309,7 @@ p.bottom {
     padding: 15px 0px;
     font-size: 18px;
 }
+
 .heading {
     text-align: center;
     font-weight: 900;
@@ -307,6 +318,7 @@ p.bottom {
     font-size: 52px;
     margin-bottom: 20px;
 }
+
 @media screen and (max-width:800px) {
     #register {
         width: 100%;
