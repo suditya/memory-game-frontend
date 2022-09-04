@@ -22,23 +22,7 @@
         </router-link>
         <div v-if="loggedIn == true" @click="logout" id="log-out">Logout</div>
         <div v-else @click="loginRedirect" id="log-in">Login</div>
-        <div v-if="loggedIn == true">
-          <img class="account-image" src="../assets/images/icons8-account-48.png"
-            @click="accountDropdown = (1^accountDropdown)">
-          <div v-show="accountDropdown==true" class="account-dropdown">
-            <div class="account-delete" v-show="accountEdit==true">
-              <h1>Do you really want gto delete your account</h1>
-              <p>You will loose all your data</p>
-              <div class="buttons">
-                <button class="yes">Yes Delete</button>
-                <button class="no">Don't Delete</button>
-              </div>
-            </div>
-            <div class="update-account">
-              update account
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
     <div class="ham-container">
@@ -93,6 +77,7 @@ export default {
       localStorage.removeItem("emailID");
       localStorage.removeItem("userName");
       this.$router.push({ path: "/register" });
+      window.location.reload()
       // reload
     },
     loginRedirect() {
@@ -237,49 +222,59 @@ export default {
 }
 
 .account-dropdown {
-  top: 9%;
-  background-color: white;
+  top: 13%;
+  background-color: #ffffff00;
   z-index: 1000;
-  border-radius: 3px;
   text-align: center;
   /* border: 1px solid grey; */
-  padding: 0px 0px;
-  /* right: 0%; */
+  /* padding: 0px 0px; */
+  right: -2.5%;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   flex-wrap: wrap;
   position: absolute;
   align-content: center;
   justify-content: center;
   align-items: center;
   transition: all .4s;
+
 }
 
-.update-account,
-.delete-account {
+.update,
+.delete {
+  margin: 1px auto;
+  border-radius: 23px;
   background-color: dimgrey;
   color: white;
+  width: 69%;
+  padding: 15px 12px;
   cursor: pointer;
 }
 
-.delete-account:hover {
+.delete:hover {
   background-color: red;
 }
 
-.update-account:hover {
+.update:hover {
   background-color: #69b37c;
 }
 
 @media only screen and (max-width:880px) {
 
+  label {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+  }
+
   .nav-close-button {
     font-weight: 900;
     position: relative;
-    top: -10%;
+    top: 3%;
     border: none;
     font-size: 53px;
     /* background-color: #00ff88; */
-    right: -34%;
+    right: -33%;
     background-color: white;
     transition: all .4s ease-in-out;
   }
@@ -358,11 +353,11 @@ export default {
 
   .hamburger-menu {
     position: absolute;
-    /* top: 19px; */
-    /* right: 8px; */
+    top: 1%;
+    right: -3%;
     display: flex;
     /* border: 1px solid grey; */
-    padding: 6px 21px;
+    padding: 0% 5%;
     transition: all .4s ease-in-out;
     align-content: center;
     justify-content: center;
@@ -371,39 +366,39 @@ export default {
   }
 
   .account-delete {
-  
-  position: absolute;
-  top: 42%;
-  height: 27%;
-  left: 14%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 48px 2px;
-  background-color: antiquewhite;
-  z-index: 1000;
-  border-radius: 22px;
-  width: 72%;
-  text-align: center;
-  margin: 0 auto;
 
-}
+    position: absolute;
+    top: 42%;
+    height: 27%;
+    left: 14%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 2px;
+    background-color: antiquewhite;
+    z-index: 1000;
+    border-radius: 22px;
+    width: 72%;
+    text-align: center;
+    margin: 0 auto;
 
-.yes {
-  cursor: pointer;
-  margin-right: 60px;
-  padding: 13px;
-  border: 1px;
-  border-radius: 21px;
-}
-.no
-{
-  cursor: pointer;
-  padding: 13px;
-  border: 1px;
-  border-radius: 21px;
-}
+  }
+
+  .yes {
+    cursor: pointer;
+    margin-right: 60px;
+    padding: 13px;
+    border: 1px;
+    border-radius: 21px;
+  }
+
+  .no {
+    cursor: pointer;
+    padding: 13px;
+    border: 1px;
+    border-radius: 21px;
+  }
 
 
 }

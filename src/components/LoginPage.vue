@@ -1,29 +1,24 @@
 <template>
     <div>
-        
+
         <NavBar />
+        
         <div id="login">
-            <!-- <MemoryCardGameHeader /> -->
+           
             <h1 class="heading">Login</h1>
             <form @submit.prevent="login()" class="form-container">
-                
+
                 <hr>
-                <!-- {{this.error.lengt}} -->
+                
                 <div v-show="errorShow == true" class="popup-msg">
-                    <!-- <button @click.prevent="closePopup" class="close">X</button> -->
+                    
                     <h2>Login Failed</h2>
-                    <p>{{  this.error  }}</p>
+                    <p>{{ this.error }}</p>
                 </div>
-                <!-- <div v-if="this.error.length > 0" class="popup-msg">
-                    {{showErrorMessage()}}
-                </div> -->
+
                 <div v-show="successShow == true" class="success-msg">
                     <h2> ✅ Login Succesfull</h2>
                 </div>
-
-                <!-- <div v-show="message" class="success-msg">
-                    <h2>Lorem ipsum dolor sit.</h2>
-                </div> -->
 
 
                 <div class="email input">
@@ -43,7 +38,6 @@
                 <input class="submitInput" id="submit" type="submit" value="login">
                 <p class="bottom">
                     Not have an account?
-                    <!-- <a href="/">Register here</a> -->
                     <router-link to="/register">Register here</router-link>
                 </p>
             </form>
@@ -54,12 +48,10 @@
     </div>
 </template>
 <script>
-// import MemoryCardGameHeader from './MemoryCardGameHeader.vue';
-// import MemoryCardGameHeader from './MemoryCardGameHeader.vue';
-// import config from "@/config";
+
 import axios from "axios";
 import NavBar from './NavBar.vue';
-// import AccountDelete from "./AccountDelete.vue";
+
 export default {
     name: "loginPage",
     data() {
@@ -85,24 +77,22 @@ export default {
             }, 2500)
         },
         showSucccessMessage() {
-            console.log("success msg function envoked")
+            
             this.successShow = true;
             setTimeout(() => {
                 this.successShow = false;
             }, 2500)
         },
         async login() {
-            // let that = this;
-            console.log("this in function", this);
             const credentials = {
                 email: this.email,
                 password: this.password,
             };
-            console.log("credentials:", credentials);
+            
 
-            console.log("lines is executing ");
+            
             try {
-                console.log("this in try", this);
+                
                 const result = await axios.post(
                     `${process.env.VUE_APP_BASE_URL}/user/login`,
                     credentials,
@@ -112,35 +102,19 @@ export default {
                         },
                     }
                 );
-                console.log(result);
+                
                 this.error = result.data.message;
 
                 if (result.data.message) {
-                    console.log("this in if", this);
+                    
                     this.showErrorMessage();
-                    console.log(result.data.message, "failed to login");
                 }
                 else {
-                    // this.key+=1;
-
-                    console.log("this in else", this);
-
-                    // console.log(this.message)
-                    // console.log("succesfull log in ");
                     await this.savePlayerDetails();
-                    // this.$forceUpdate();
-                    // setTimeout(()=>
-                    // {
-                    //     console.log("setTimeOut");
-                    //     console.log(this.message);
-
                     this.showSucccessMessage();
                     setTimeout(() => {
                         this.$router.push({ path: "/" });
                     }, 1500)
-
-                    // },1000)
-
                 }
             }
             catch (err) {
@@ -151,11 +125,9 @@ export default {
         },
         async savePlayerDetails() {
             try {
-                console.log("hi i am working ")
                 const result = await axios.get(
                     `${process.env.VUE_APP_BASE_URL}/user/getPlayerDetails/${this.email}`
                 );
-                console.log(result.data), " getting details";
                 localStorage.setItem("userName", result.data.name)
                 localStorage.setItem("countryEmoji", result.data.countryEmoji)
 
@@ -165,7 +137,10 @@ export default {
             }
         }
     },
+    created:
+    {
 
+    },
     components: { NavBar}
 };
 </script>
@@ -287,6 +262,7 @@ p.bottom {
     color: white;
     font-size: 52px;
 }
+
 @media screen and (max-width:800px) {
     #login {
         width: 100%;

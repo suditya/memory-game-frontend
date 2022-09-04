@@ -2,22 +2,18 @@
     <div>
         <NavBar />
         <div id="register">
-            <!-- <MemoryCardGameHeader /> -->
+
             <h1 class="heading">Register </h1>
             <form @submit.prevent="register()" class="form-container">
 
                 <hr>
                 <div v-show="errorShow == true" class="popup-msg">
-                    <!-- <button @click.prevent="closePopup" class="close">X</button> -->
                     <h2>Registration Failed</h2>
                     <p>{{ this.error }}</p>
                 </div>
                 <div v-show="successShow == true" class="success-msg">
                     <h2>✅ Registration Succesfull</h2>
                 </div>
-                <!-- <div v-show="this.success == true" class="success-msg">
-                    <h2>Registration Succesfull</h2>
-                </div> -->
                 <div class="name input">
                     <label for="fullName">
                         <p>Full Name 👨‍🎓</p>
@@ -34,24 +30,24 @@
 
                 </div>
 
-                <!-- <div v-show="this.emailProblem">
-        <p>{{this.emailProblem}}</p>
-      </div> -->
                 <div class="password input">
                     <label for="password">
                         <p>Password 🔑</p>
                     </label>
                     <input :required="true" class="passInput" type="password" name="password" v-model="password"
                         placeholder="password">
-
-                    <span class="validations" v-show="checkInvalidPass == true">
-                        Password should contain atleast
-                        <span v-show="this.password.length < 8">8 characters</span>
-                        <span v-show="!(this.upperCharRegEx.test(this.password))"> 1 upper case character,</span>
-                        <span v-show="!(this.lowerCharRegEx.test(this.password))"> 1 lower case character,</span>
-                        <span v-show="!(this.numberRegEx.test(this.password))"> 1 number</span>
+                    <span class="validations" v-if="checkInvalidPass==true && password.length > 0 ">
+                        <!-- <span v-show="checkInvalidPass==true">Password should contain atleast</span>  -->
+                        <span v-show="this.password.length < 8">Password should have atleast <b>8 characters</b> </span>
+                        <span v-show="!(this.upperCharRegEx.test(this.password))"> Password should have atleast <b>1
+                                capital letter</b> ,</span>
+                        <span v-show="!(this.lowerCharRegEx.test(this.password))">Password should have atleast <b> 1
+                                small letter, </b></span>
+                        <span v-show="!(this.numberRegEx.test(this.password))"> Password should have atleast <b> 1
+                                number, </b></span>
                     </span>
-                    <span class="validPass" v-show="password.length > 0 && !(checkInvalidPass)">Password is valid</span>
+                    <span class="validPass" v-if="password.length > 0 && (checkInvalidPass)==false">Password is
+                        valid</span>
 
                 </div>
                 <div class="password input">
@@ -152,7 +148,7 @@ export default {
                 console.log(this.error);
                 if (result.data.message) {
                     this.popMessage();
-                    console.log(result.data.message, "failed to register");
+                    
                 }
                 else {
                     this.success == true;
@@ -181,10 +177,7 @@ export default {
         checkInvalidPass() {
             if (this.password.length == 0) return false;
             let invalidPass = this.password.length < 8 || (!(this.upperCharRegEx.test(this.password))) || (this.lowerCharRegEx.test(this.password)) || !(this.lowerCharRegEx.test(this.password)) || !(this.numberRegEx.test(this.password));
-            console.log(this.invalidPass, "invalid password");
-
             return invalidPass;
-
         }
     }
 };
@@ -359,6 +352,10 @@ p.bottom {
         right: -2%;
         /* color: #D8000C;
     background-color: #FFBABA; */
+    }
+
+    #submit {
+        font-size: 17px;
     }
 
 }

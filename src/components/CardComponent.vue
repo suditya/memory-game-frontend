@@ -4,35 +4,25 @@
         <!-- <MemoryCardGameHeader/> -->
         <div v-show="gameStarter == true" class="game-starter">
             <!-- <h1>Let's Play 🤩</h1> -->
-            <h1 class="blink">{{  msg1  }} {{  msg2  }} {{  msg3  }} {{  msg4  }}</h1>
+            <h1 class="blink">{{ msg1 }} {{ msg2 }} {{ msg3 }} {{ msg4 }}</h1>
             <!-- <span ><h1>{{  msg1  }} {{  msg2  }} {{  msg3  }}</h1> <h1 class="blink">{{  msg4  }}</h1></span> -->
-            <h1 class="game-heading">{{  heading1  }} {{  heading2  }} </h1>
-            <h1 class="game-heading">{{  heading3  }}</h1>
-            <h1 class="game-icon blink">{{  heading4  }}</h1>
+            <h1 class="game-heading">{{ heading1 }} {{ heading2 }} </h1>
+            <h1 class="game-heading">{{ heading3 }}</h1>
+            <h1 class="game-icon blink">{{ heading4 }}</h1>
             <button @click="startGame()" class="start-button">play</button>
         </div>
-
         <div v-show="gameStarter == false" class="game-container">
             <div class="d-flex flex-row justify-content-center py-3">
                 <div class="turns p-3"><span class="btn btn-info">Turns : <span class="badge"
-                            :class="finish ? 'badge-success' : 'badge-danger'">{{  turns  }}</span> </span></div>
+                            :class="finish ? 'badge-success' : 'badge-danger'">{{ turns }}</span> </span></div>
                 <div class="totalTime p-3"><span class="btn btn-info">Total Time : <span class="badge"
-                            :class="finish ? 'badge-success' : 'badge-danger'">{{  min  }} : {{  sec  }}</span></span></div>
+                            :class="finish ? 'badge-success' : 'badge-danger'">{{ min }} : {{ sec }}</span></span></div>
             </div>
         </div>
-        <!-- <div class="boxing" style="width:80%; margin:0px auto">
-        <div class="col-md-6 mx-auto ">
-             <div class="row justify-content-md-center">
-                    <div v-for="(card , index) in memoryCards" :key="index" class="col-auto mb-3 flip-container" :class="{ 'flipped': card.isFlipped, 'matched' : card.isMatched , 'shake' : animated}" @click="flipCard(card)" @click.prevent="playSound('http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3')">
-                    <div class="memorycard">
-                        <div class="front border rounded shadow"></div>
-                        {{card.img}}
-                        <div class="back rounded border"><img height="150px" width="90%" alt="xy"  :src="card.img"></div>
-                    </div>
-                 </div>
-            </div>
+        <div v-show="isLoggedIn==false && (!closePopup) && !gameStarter" class="popup-msg">
+            <button class="close" @click="closePopup=true">X</button>
+            <p>Please login yourself to save your scores</p>
         </div>
-    </div> -->
 
         <div v-show="gameStarter == false" class="row boxing">
             <div v-for="(card, index) in memoryCards" :key="index" id="card-box"
@@ -43,7 +33,7 @@
                 <div class="memorycard">
                     <div class="front"></div>
                     <!-- {{card.img}} -->
-                    <div class="back "><span class="mood-emoji">{{  card.emoji  }}</span></div>
+                    <div class="back "><span class="mood-emoji">{{ card.emoji }}</span></div>
                 </div>
             </div>
         </div>
@@ -51,16 +41,11 @@
         <div v-show="gameStarter == false" class="restart p-3"><button class="btn btn-info" @click="reset"
                 :disabled="!start">Restart</button></div>
 
-
-        <!-- <div v-show="this.finish==true">Finished</div>
-<div v-show="this.finish==false">Not Finished</div> -->
-
-
         <div v-show="showWindow == true" id="win-screen" class="">
             <h3>🎯 Nailed It! 🎯</h3>
             <button @click.prevent="closeWindow()" class="close-button">X</button>
-            <div class="score click-count">Your Score: {{  this.turns  }}</div>
-            <div class="score low-score">Time: {{  this.totalTime.minutes  }} : {{  this.totalTime.seconds  }}</div>
+            <div class="score click-count">Your Score: {{ this.turns }}</div>
+            <div class="score low-score">Time: {{ this.totalTime.minutes }} : {{ this.totalTime.seconds }}</div>
             <div @click="reset()" id="replay-button">Play Again?</div>
         </div>
 
@@ -98,10 +83,12 @@ export default {
                 minutes: 0,
                 seconds: 0,
             },
+            closePopup:false,
             animated: false,
             i: 0,
             showWindow: false,
             gameStarter: true,
+            isLoggedIn:false,
             /* eslint-disable */
             cards: [
                 { name: "gorilla", "emoji": "🦍" },
@@ -144,7 +131,17 @@ export default {
                 }, 300)
             }, 300)
         }, 300)
-
+        i
+        let user= localStorage.getItem('userName');
+        if(user) 
+        {
+            this.isLoggedIn=false;
+            setTimeout(()=>
+            {
+                thsi.isLoggedIn=false
+            })
+        }
+        else this.isLoggedIn=false;
         // this.insertLeaderBoard();
     },
     methods: {
@@ -156,7 +153,7 @@ export default {
         },
         closeWindow() {
             this.showWindow = false;
-            console.log(this.showWindow, "shows window")
+            
         },
         playSound(sound) {
             if (sound) {
@@ -184,7 +181,7 @@ export default {
                 clearInterval(this.interval);
                 this.finish = true;
                 this.showWindow = true
-                console.log("hello : ", this.window, this.finish);
+                
             }
             if (this.flippedCards[0].name === this.flippedCards[1].name) {
                 setTimeout(() => {
@@ -196,7 +193,7 @@ export default {
                         this.showWindow = true
                         // console.log("hello : ",this.i++);
                         const name = localStorage.getItem('userName');
-                        console.log(name);
+                        
                         if (name)
                             this.insertLeaderBoard();
                         else {
@@ -303,8 +300,10 @@ export default {
                 return "0" + this.totalTime.minutes;
             }
             return this.totalTime.minutes;
-        }
+        },
+        
     },
+    
     components: { MemoryCardGameHeader, NavBar }
 }
 
@@ -313,6 +312,41 @@ export default {
 <style scoped>
 * {
     box-sizing: border-box;
+}
+
+.popup-msg {
+    width: 28%;
+    padding: 20px 27px;
+    position: absolute;
+    top: 10%;
+    z-index: 1000;
+    background-color: beige;
+    border: 1px solid grey;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+    margin: 25px;
+    text-align: center;
+    /* left: 2%; */
+    border-radius: 36px;
+    right: -2%;
+    font-size: 20px;
+    color: black;
+}
+
+button.close {
+    padding: 5px;
+    font-size: 30px;
+    background-color: #d2bdbd00;
+    /* border: 1px solid #fafafa; */
+    position: relative;
+    top: -19px;
+    right: -1px;
+    transform: rotateX(180);
+    transition: all .4s ease-in-out;
+}
+
+button.close:hover {
+    font-size: 40px;
 }
 
 body {
@@ -460,11 +494,12 @@ body {
     border: 0.5px solid #fff5f5;
     border-radius: 19px;
     /* box-shadow: 5px 5px 9px 0px #00ff88; */
-    box-shadow: 7px 6px 3px 0px #b3b6b4;;
+    box-shadow: 7px 6px 3px 0px #b3b6b4;
+    ;
 }
 
 .front:hover {
-    background-color:black;
+    background-color: black;
     box-shadow: 4px 3px 7px 1px #464141;
 }
 
@@ -653,6 +688,14 @@ header {
     .start-button,
     .start-button:hover {
         width: 35%;
+    }
+
+    .popup-msg {
+        width: 50%;
+        top: 6%;
+        padding: 20px 17px;
+        right: -5%;
+        font-size: 15px;
     }
 }
 
