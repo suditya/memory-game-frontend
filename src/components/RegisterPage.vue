@@ -52,7 +52,7 @@
                         <span v-show="!(this.numberRegEx.test(this.password))"> 1 number</span>
                     </span>
                     <span class="validPass" v-show="password.length > 0 && !(checkInvalidPass)">Password is valid</span>
-                    
+
                 </div>
                 <div class="password input">
                     <label for="password">
@@ -60,7 +60,9 @@
                     </label>
                     <input :required="true" class="passInput" type="password" name="password" v-model="confirmPassword"
                         placeholder="confirm password">
-                    <p class="validations" v-show="!(this.password == this.confirmPassword) &&(this.password.length>0)"> confirm password is not
+                    <p class="validations"
+                        v-show="!(this.password == this.confirmPassword) &&(this.confirmPassword.length>0)"> confirm
+                        password is not
                         matching with password </p>
                 </div>
                 <label for="country">
