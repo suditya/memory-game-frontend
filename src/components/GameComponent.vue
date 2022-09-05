@@ -57,8 +57,7 @@ import '../assets/style.css'
 
 import _ from 'lodash';
 import MemoryCardGameHeader from './MemoryCardGameHeader.vue';
-// import { constants } from 'fs';
-// import config from '@/config';
+
 import axios from "axios";
 import NavBar from './NavBar.vue';
 
@@ -88,7 +87,7 @@ export default {
             i: 0,
             showWindow: false,
             gameStarter: true,
-            isLoggedIn:false,
+            isLoggedIn:true,
             /* eslint-disable */
             cards: [
                 { name: "gorilla", "emoji": "🦍" },
@@ -131,17 +130,22 @@ export default {
                 }, 300)
             }, 300)
         }, 300)
-        i
+        
         let user= localStorage.getItem('userName');
+        console.log(user, "username")
         if(user) 
         {
-            this.isLoggedIn=false;
-            setTimeout(()=>
-            {
-                thsi.isLoggedIn=false
-            })
+            this.isLoggedIn=true;
         }
-        else this.isLoggedIn=false;
+        else 
+        {
+            this.isLoggedIn=false;
+            // setTimeout(()=>
+            // {
+            //     this.isLoggedIn=true;
+            // }, 2000)
+
+        }
         // this.insertLeaderBoard();
     },
     methods: {
@@ -175,7 +179,7 @@ export default {
             }
         },
         _match(card) {
-            console.log(card);
+            
             this.turns++;
             if (this.memoryCards.every(card => card.isMatched === true)) {
                 clearInterval(this.interval);
@@ -237,7 +241,7 @@ export default {
             const email = localStorage.getItem('emailID');
             const name = localStorage.getItem('userName');
             const countryEmoji = localStorage.getItem("countryEmoji");
-            console.log(name, " name", countryEmoji, "-> emoji")
+            
             const credentials = {
                 email,
                 name,
@@ -245,9 +249,9 @@ export default {
                 time: timeString,
                 countryEmoji,
             };
-            console.log("credentials:", credentials);
+            
 
-            console.log("lines is executing ");
+            
             try {
                 const result =
                     await axios.post(
@@ -259,7 +263,7 @@ export default {
                             },
                         }
                     );
-                console.log(result);
+                
             }
             catch (error) {
                 console.log("error happend", error);
@@ -320,8 +324,8 @@ export default {
     position: absolute;
     top: 10%;
     z-index: 1000;
-    background-color: beige;
-    border: 1px solid grey;
+    background-color: #a2cbcc;
+    border: 1px solid #f9f7f7;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
     margin: 25px;
@@ -330,23 +334,24 @@ export default {
     border-radius: 36px;
     right: -2%;
     font-size: 20px;
-    color: black;
+    color: #000000;
 }
 
 button.close {
     padding: 5px;
     font-size: 30px;
-    background-color: #d2bdbd00;
+    /* background-color: #00000000; */
     /* border: 1px solid #fafafa; */
     position: relative;
     top: -19px;
+    color: black;
     right: -1px;
     transform: rotateX(180);
-    transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out
 }
 
 button.close:hover {
-    font-size: 40px;
+    font-size: 34px;
 }
 
 body {
@@ -733,6 +738,17 @@ header {
         border-radius: 24px;
     }
 
+    .game-starter {
+        height: 100vh;
+        background-color: black;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        /* justify-content: center; */
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
     .memorycard {
         box-sizing: border-box;
         width: 150px;
@@ -745,6 +761,16 @@ header {
 
     .start-button {
         width: 31%;
+    }
+
+    .game-heading {
+        color: #d11423;
+        font-size: 70px;
+        font-weight: bold;
+        text-shadow: 2px 1px 2px #37e292;
+        flex-wrap: nowrap;
+        text-align: center;
+
     }
 
     .start-button:hover {
@@ -815,15 +841,6 @@ header {
         /* line-height: rem; */
         font-size: 59px;
         /* margin-bottom: .25rem; */
-    }
-
-    .game-heading {
-        color: #d11423;
-        font-size: 85px;
-        font-weight: bold;
-        text-shadow: 2px 1px 2px #37e292;
-        flex-wrap: nowrap;
-        text-align: center;
     }
 
 }

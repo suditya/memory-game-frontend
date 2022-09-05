@@ -1,7 +1,7 @@
 import Router from 'vue-router';
 import PageNotFound from '../components/PageNotFound.vue';
 import LoginPage from '../components/LoginPage.vue'
-import CardComponent from '../components/CardComponent';
+import GameComponent from '../components/GameComponent';
 import RegisterPage from '../components/RegisterPage';
 import LeaderBoard from '../components/LeaderBoard'
 /**
@@ -21,7 +21,7 @@ const router = new Router(
             {
                 name: 'home',
                 path: '/',
-                component: CardComponent
+                component: GameComponent
             },
             {
                 name:'register',

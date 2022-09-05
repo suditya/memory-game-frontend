@@ -17,7 +17,7 @@
                 </div>
 
                 <div v-show="successShow == true" class="success-msg">
-                    <h2> ✅ Login Succesfull</h2>
+                    <h2> ✅ Login Succesful</h2>
                 </div>
 
 

@@ -35,7 +35,7 @@
           <tr>
             <th>Rank</th>
             <th>Name</th>
-            <th>Low Score</th>
+            <th>Score</th>
             <th>Time</th>
           </tr>
           <tr v-for="(playerObj, index) in filteredPlayersRanking" :key="index">

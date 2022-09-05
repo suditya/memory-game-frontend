@@ -12,7 +12,7 @@
                     <p>{{ this.error }}</p>
                 </div>
                 <div v-show="successShow == true" class="success-msg">
-                    <h2>✅ Registration Succesfull</h2>
+                    <h2>✅ Registration Succesful</h2>
                 </div>
                 <div class="name input">
                     <label for="fullName">
@@ -343,15 +343,13 @@ p.bottom {
         width: 70%;
         padding: 1% 10%;
         position: absolute;
-        top: 5%;
+        top: 32%;
         font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
         font-weight: 300;
         margin: 25px;
         /* left: 2%; */
         border-radius: 36px;
         right: -2%;
-        /* color: #D8000C;
-    background-color: #FFBABA; */
     }
 
     #submit {

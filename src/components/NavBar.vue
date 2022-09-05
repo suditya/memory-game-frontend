@@ -22,7 +22,7 @@
         </router-link>
         <div v-if="loggedIn == true" @click="logout" id="log-out">Logout</div>
         <div v-else @click="loginRedirect" id="log-in">Login</div>
-        
+
       </div>
     </div>
     <div class="ham-container">
@@ -307,10 +307,10 @@ export default {
     transition: all .4s ease-in-out;
     display: flex;
     top: 0;
-    height: 38%;
+    height: 44%;
     justify-content: center;
     width: 48%;
-    font-weight: 900;
+    font-weight: 800;
     border-bottom-left-radius: 15px;
     z-index: 1000;
     /* border-left: 20px; */
@@ -322,7 +322,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10px 7px;
+    padding: 10px 2px;
     background-color: rgb(255, 255, 255);
     color: black;
     position: absolute;
