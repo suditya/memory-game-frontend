@@ -4,10 +4,6 @@ import LoginPage from '../components/LoginPage.vue'
 import GameComponent from '../components/GameComponent';
 import RegisterPage from '../components/RegisterPage';
 import LeaderBoard from '../components/LeaderBoard'
-/**
- * Add a route property ```meta: { authorize: [ <roles> ] }``` with <roles> authorized to access the route
- * Let authorize be empty to allow access to all authenticated users
- */
 
 const router = new Router(
     {
@@ -42,16 +38,5 @@ const router = new Router(
     }
 );
 
-// // Global auth guard
-// router.beforeEach(( to, from, next ) => {
-//     // Right now, role-based authorization is NOT supported
-//     if( to.meta.authorize && !isAuthenticated() ) {
-//         next({
-//             name: 'login'
-//         });
-//     } else {
-//         next();
-//     }
-// });
 
 export default router;

@@ -9,11 +9,6 @@
           <div>LeaderBoard</div>
         </router-link>
       </div>
-      <!-- <div class="middle list-unstyled ">
-        <router-link to="/" class="link-plain middle-item" style="margin-right:30px">
-          <div class="game-heading">Memory Card Game</div>
-        </router-link>
-      </div> -->
       <div class="right list-unstyled">
         <div v-if="this.fullName" id="hello-user">hello! 👋{{ this.fullName }}{{ this.emoji }}</div>
         <!-- <div  id="hello-user">hello 😉{{localStorage.getItem('userName')}}👋!</div> -->
@@ -314,7 +309,7 @@ export default {
     border-bottom-left-radius: 15px;
     z-index: 1000;
     /* border-left: 20px; */
-    border-left-radius: 14px;
+    /* border-left-radius: 14px; */
     /* border-radius: 15px; */
     border-top-left-radius: 11px;
     right: 0;

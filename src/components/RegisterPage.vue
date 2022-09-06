@@ -86,7 +86,6 @@
 import axios from "axios";
 import NavBar from './NavBar.vue';
 import * as nations from '../data/flags.json'
-import '../assets/styles/flag.css'
 console.log(nations);
 export default {
     name: "registerPage",
