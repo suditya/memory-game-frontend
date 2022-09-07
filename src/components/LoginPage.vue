@@ -32,8 +32,25 @@
                     <label for="password">
                         <p>Password 🔑</p>
                     </label>
-                    <input :required="true" class="passInput" type="password" name="password" v-model="password"
-                        placeholder="password">
+                    <div class="wrapper">
+                        <div id="password-input">
+                            <input :required="true" id="pass" v-if="showPassword==true" type="text" v-model="password"
+                                placeholder="password" />
+                            <input :required="true" id="pass" placeholder="password" v-else type="password"
+                                v-model="password">
+                        </div>
+                        <div class="eye-image">
+                            <button @click.prevent="showPassword=showPassword ^ 1" class="show-hide">
+                                <img v-show="showPassword==false" class="show-hide-icon" src="../assets/images/view.png"
+                                    alt="show-icon">
+                                <img v-show="showPassword==true" class="show-hide-icon" src="../assets/images/hide.png"
+                                    alt="hide-icon">
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- <input :required="true" class="passInput" type="password" name="password" v-model="password"
+                        placeholder="password"> -->
                 </div>
                 <input class="submitInput" id="submit" type="submit" value="login">
                 <p class="bottom">
@@ -63,7 +80,8 @@ export default {
             message: "",
             key: 0,
             errorShow: false,
-            successShow: false
+            successShow: false,
+            showPassword:false
         };
     },
     methods: {
@@ -262,6 +280,51 @@ p.bottom {
     color: white;
     font-size: 52px;
 }
+.wrapper {
+    display: flex;
+    width: 66%;
+    border-radius: 9px;
+    border-radius: 10px;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid grey;
+}
+
+#password-input {
+    width: 85%;
+    border: none;
+}
+
+.wrapper:focus,  .wrapper:focus:hover , #pass:focus, #pass:focus:hover, .show-hide:focus, .show-hide-:focus:hover{
+    outline: none;
+    border:none;
+}
+.eye-image {
+    width: 12%;
+    margin-left: 3px;
+}
+
+.show-hide {
+    width: 80%;
+    background: none;
+    border: none;
+    /* object-fit: cover; */
+    max-width: 45px;
+}
+
+.show-hide-icon {
+    width: 100%;
+}
+#pass {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    /* border-right: none; */
+    /* border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px; */
+}
 
 @media screen and (max-width:800px) {
     #login {
@@ -291,6 +354,10 @@ p.bottom {
         right: -2%;
         /* color: #D8000C;
     background-color: #FFBABA; */
+    }
+    .wrapper
+    {
+        width: 180%;
     }
 }
 </style>

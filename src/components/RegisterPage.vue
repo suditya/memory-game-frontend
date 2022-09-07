@@ -30,14 +30,30 @@
 
                 </div>
 
-                <div class="password input">
+                <div class="password ">
                     <label for="password">
                         <p>Password 🔑</p>
                     </label>
-                    <input :required="true" class="passInput" type="password" name="password" v-model="password"
-                        placeholder="password">
+                    <div class="wrapper">
+                        <div id="password-input">
+                            <input :required="true" id="pass" v-if="showPassword==true" type="text" v-model="password"
+                                placeholder="password" />
+                            <input :required="true" id="pass" placeholder="password" v-else type="password"
+                                v-model="password">
+                        </div>
+                        <div class="eye-image">
+                            <button @click.prevent="showPassword=showPassword ^ 1" class="show-hide">
+                                <img v-show="showPassword==false" class="show-hide-icon" src="../assets/images/view.png"
+                                    alt="show-icon">
+                                <img v-show="showPassword==true" class="show-hide-icon" src="../assets/images/hide.png"
+                                    alt="hide-icon">
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- <input :required="true" class="passInput" type="password" name="password" v-model="password"
+                        placeholder="password"> -->
                     <span class="validations" v-if="checkInvalidPass==true && password.length > 0 ">
-                        <!-- <span v-show="checkInvalidPass==true">Password should contain atleast</span>  -->
                         <span v-show="this.password.length < 8">Password should have atleast <b>8 characters</b> </span>
                         <span v-show="!(this.upperCharRegEx.test(this.password))"> Password should have atleast <b>1
                                 capital letter</b> ,</span>
@@ -54,8 +70,25 @@
                     <label for="password">
                         <p>Confirm Password 🔑</p>
                     </label>
-                    <input :required="true" class="passInput" type="password" name="password" v-model="confirmPassword"
-                        placeholder="confirm password">
+                    <!-- <input :required="true" class="passInput" id="confirm-password-input" type="password" name="password" v-model="confirmPassword"
+                        placeholder="confirm password"> -->
+                    <div class="wrapper">
+                        <div id="password-input">
+                            <input :required="true" id="pass" v-if="showConfirmPassword==true" type="text" v-model="confirmPassword"
+                                placeholder="confirm password" />
+                            <input :required="true" id="pass" placeholder="confirm password" v-else type="password"
+                                v-model="confirmPassword">
+                        </div>
+                        <div class="eye-image">
+                            <button @click.prevent="showConfirmPassword=showConfirmPassword ^ 1" class="show-hide">
+                                <img v-show="showConfirmPassword==false" class="show-hide-icon" src="../assets/images/view.png"
+                                    alt="show-icon">
+                                <img v-show="showConfirmPassword==true" class="show-hide-icon" src="../assets/images/hide.png"
+                                    alt="hide-icon">
+                            </button>
+                        </div>
+                    </div>
+
                     <p class="validations"
                         v-show="!(this.password == this.confirmPassword) &&(this.confirmPassword.length>0)"> confirm
                         password is not
@@ -109,7 +142,9 @@ export default {
             errorShow: false,
             validPass: true,
             invalidPass: false,
-            notValidPass: true
+            notValidPass: true,
+            showPassword:false, 
+            showConfirmPassword:false
         };
     },
     methods: {
@@ -313,6 +348,74 @@ p.bottom {
     margin-bottom: 20px;
 }
 
+.wrapper {
+    display: flex;
+    width: 100%;
+    border-radius: 9px;
+    border-radius: 10px;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid grey;
+}
+
+#password-input {
+    width: 85%;
+    border: none;
+}
+
+.wrapper:focus,  .wrapper:focus:hover , #pass:focus, #pass:focus:hover, .show-hide:focus, .show-hide-:focus:hover{
+    outline: none;
+    border:none;
+}
+/* #pass:focus {
+    outline: none;
+    border:none;
+}
+#pass:focus:hover {
+    outline: none;
+    border:none;
+}
+.show-hide-icon {
+    width: 100%;
+} */
+.eye-image {
+    width: 12%;
+    margin-left: 3px;
+}
+
+.show-hide {
+    width: 80%;
+    background: none;
+    border: none;
+    /* object-fit: cover; */
+    max-width: 45px;
+}
+
+.show-hide-icon {
+    width: 100%;
+}
+
+
+#pass {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    /* border-right: none; */
+    /* border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px; */
+}
+
+.password {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 36%;
+}
+
 @media screen and (max-width:800px) {
     #register {
         width: 100%;
@@ -353,6 +456,10 @@ p.bottom {
 
     #submit {
         font-size: 17px;
+    }
+    .wrapper
+    {
+        width: 250%;
     }
 
 }
