@@ -369,17 +369,6 @@ p.bottom {
     outline: none;
     border:none;
 }
-/* #pass:focus {
-    outline: none;
-    border:none;
-}
-#pass:focus:hover {
-    outline: none;
-    border:none;
-}
-.show-hide-icon {
-    width: 100%;
-} */
 .eye-image {
     width: 12%;
     margin-left: 3px;
