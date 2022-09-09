@@ -11,17 +11,25 @@
             <button @click="startGame()" class="start-button">play</button>
         </div>
         <div v-show="gameStarter == false" class="game-container">
-            <div class="d-flex flex-row justify-content-center py-3">
-                <div class="turns p-3">
-                    <span class="btn btn-info">Turns :
-                        <span class="badge" :class="finish ? 'badge-success' : 'badge-danger'">{{ turns }}</span>
-                    </span>
+            <div class="turns-class">
+                <div class="turns">
+                    <button class="turn-button" style="cursor:default ; outline: none;"
+                        :class="finish? 'game-start' : 'game-end'">Turns :
+                        <span class="turn-show">{{ turns }}</span>
+                    </button>
                 </div>
-                <div class="totalTime p-3">
-                    <span class="btn btn-info">Total Time :
-                        <span class="badge" :class="finish ? 'badge-success' : 'badge-danger'">{{ min }} : {{ sec
-                        }}</span></span>
+                <div class="totalTime">
+                    <button class="totalTime-button" style="cursor:default ; outline: none;"
+                        :class="finish||true ? 'game-start' : 'game-end'">Total Time :
+                        <span class="time">{{ min }} : {{ sec
+                        }}</span>
+                    </button>
                 </div>
+            </div>
+            <div v-show="gameStarter == false" class="restart">
+                <button class="restart-button" id="button-restart" @click="reset" :disabled="!start">
+                    Restart
+                </button>
             </div>
         </div>
         <div v-show="isLoggedIn == false && !closePopup && !gameStarter" class="popup-msg">
@@ -36,10 +44,10 @@
                   matched: card.isMatched,
                   shake: animated,
                 }" @click="flipCard(card)" @click.prevent="
-          playSound(
-            'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3'
-          )
-        ">
+                  playSound(
+                    'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3'
+                  )
+                ">
                 <div class="memorycard">
                     <div class="front"></div>
                     <!-- {{card.img}} -->
@@ -50,11 +58,11 @@
             </div>
         </div>
 
-        <div v-show="gameStarter == false" class="restart p-3">
+        <!-- <div v-show="gameStarter == false" class="restart p-3">
             <button class="btn btn-info" @click="reset" :disabled="!start">
                 Restart
             </button>
-        </div>
+        </div> -->
 
         <div v-show="showWindow == true" id="win-screen" class="">
             <h3>🎯 Nailed It! 🎯</h3>
@@ -64,9 +72,11 @@
                 Time: {{ this.totalTime.minutes }} : {{ this.totalTime.seconds }}
             </div>
             <div @click="reset()" id="replay-button">Play Again?</div>
-            <div v-if="isLoggedIn==true" class="leaderboard-link">See yourself on the <router-link to="/leaderboard">Leaderboard🏆</router-link>
+            <div v-if="isLoggedIn==true" class="leaderboard-link">See yourself on the <router-link to="/leaderboard">
+                    Leaderboard🏆</router-link>
             </div>
-            <div v-else class="leaderboard-link">Login to see yourself on the <router-link to="/leaderboard">Leaderboard🏆</router-link>
+            <div v-else class="leaderboard-link">Login to see yourself on the <router-link to="/leaderboard">
+                    Leaderboard🏆</router-link>
             </div>
         </div>
     </div>
@@ -321,7 +331,7 @@ export default {
     position: absolute;
     top: 10%;
     z-index: 1000;
-    background-color: #a2cbcc;
+    background-color: #e8e8e8;
     border: 1px solid #f9f7f7;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
         Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -336,7 +346,7 @@ export default {
 }
 
 button.close {
-    padding: 5px;
+    padding: 10px;
     font-size: 30px;
     position: relative;
     top: -19px;
@@ -347,7 +357,9 @@ button.close {
 }
 
 button.close:hover {
-    font-size: 34px;
+    background-color: grey;
+    border-radius: 30px;
+    outline: none;
 }
 
 body {
@@ -371,6 +383,14 @@ body {
     /* border-radius: 12px; */
 }
 
+.game-container {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 0px;
+}
+
 .blink {
     font-size: 5em;
     color: #00ff88;
@@ -381,6 +401,69 @@ body {
 .game-icon {
     font-size: 90px;
     margin-bottom: 14px;
+}
+
+.turns,
+.totalTime,
+.restart {
+    padding: 0px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.turn-button,
+.totalTime-button,
+.restart-button {
+    align-items: center;
+    background-color: #FCFCFD;
+    border-radius: 4px;
+    border-width: 0;
+    box-shadow: rgb(45 35 66 / 40%) 0 2px 4px, rgb(45 35 66 / 30%) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: black;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono", monospace;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
+    white-space: nowrap;
+    font-size: 22px;
+}
+
+.restart-button:focus {
+    box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    outline: none;
+}
+
+.restart-button:hover {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    transform: translateY(-2px);
+}
+
+.restart-button:active {
+    box-shadow: #D6D6E7 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+.turns-class {
+    /* d-flex flex-row justify-content-center py-3 */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 21px;
 }
 
 @keyframes animate {
@@ -413,13 +496,9 @@ body {
     font-size: 28px;
     font-weight: bold;
     border: 1px solid black;
-    /* color: #ffffff; */
     background-color: black;
     color: #1b754b;
     box-shadow: 0px 0px 20px 3px;
-    /* background-color: #1b754b; */
-    /* FONT-WEIGHT: 200; */
-    /* FONT-WEIGHT: 800; */
     font-weight: bold;
     border: 2px solid #1b754b;
     border-radius: 26px;
@@ -431,7 +510,6 @@ body {
     font-size: 28px;
     font-weight: bold;
     border: 1px solid black;
-    /* color: #ffffff; */
     background-color: black;
     color: #d14949;
     box-shadow: 0px 0px 20px 10px;
@@ -539,14 +617,6 @@ header {
     align-items: center;
 }
 
-/* .boxing {
-    width: 45%;
-    margin: 20px auto;
-    border: 1px solid lightcoral;
-    border-radius: 12px;
-    padding: 60px 10px;
-    box-shadow: 0px 0px 0px 15px lightcoral;
-} */
 .boxing {
     width: 45%;
     margin: 20px auto;
@@ -679,7 +749,49 @@ header {
     }
 }
 
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 680px) {
+
+    .turn-button,
+    .totalTime-button,
+    .restart-button {
+        align-items: center;
+        background-color: #FCFCFD;
+        border-radius: 4px;
+        border-width: 0;
+        box-shadow: rgb(45 35 66 / 40%) 0 2px 4px, rgb(45 35 66 / 30%) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+        box-sizing: border-box;
+        color: black;
+        font-weight: 300;
+        cursor: pointer;
+        display: inline-flex;
+        font-family: "JetBrains Mono", monospace;
+        height: 34px;
+        justify-content: center;
+        line-height: 1;
+        list-style: none;
+        overflow: hidden;
+        padding-left: 5px;
+        padding-right: 5px;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        -moz-user-select: none;
+        user-select: none;
+        -webkit-user-select: none;
+        white-space: nowrap;
+        font-size: 11px;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .popup-msg {
+        width: 50%;
+        top: 6%;
+        padding: 15px 5px;
+        right: -5%;
+        font-size: 15px;
+    }
+
     .blink {
         font-size: 5em;
         color: #00ff88;
@@ -691,14 +803,15 @@ header {
     }
 
     #win-screen {
-        height: 32%;
-        width: 68%;
+        height: 40%;
+        width: 74%;
         border-radius: 10px;
         margin: auto auto;
         background-color: rgba(230, 230, 250, 0.95);
         position: absolute;
         left: 19.2%;
         top: 30%;
+        text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
