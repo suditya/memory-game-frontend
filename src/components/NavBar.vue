@@ -46,8 +46,8 @@
       <router-link to="/register" class="nav-link">
         Register
       </router-link>
-      <span v-if="loggedIn == true" @click="logout">Logout</span>
-      <span @click="loginRedirect">Login</span>
+      <span class="nav-link" v-if="loggedIn == true" @click="logout">Logout</span>
+      <span class="nav-link" @click="loginRedirect">Login</span>
     </div>
   </div>
 </template>
@@ -139,7 +139,10 @@ export default {
   list-style: none;
   color: white;
 }
-
+.nav-link {
+    display: block;
+    color: black;
+}
 .right {
   display: flex;
   width: 60%;
@@ -265,11 +268,11 @@ export default {
   .nav-close-button {
     font-weight: 900;
     position: relative;
-    top: 3%;
+    top: 0%;
     border: none;
     font-size: 53px;
     /* background-color: #00ff88; */
-    right: -33%;
+    right: -31%;
     background-color: white;
     transition: all .4s ease-in-out;
   }
@@ -303,21 +306,16 @@ export default {
     display: flex;
     top: 0;
     height: 44%;
-    justify-content: center;
     width: 48%;
     font-weight: 800;
     border-bottom-left-radius: 15px;
     z-index: 1000;
-    /* border-left: 20px; */
-    /* border-left-radius: 14px; */
-    /* border-radius: 15px; */
     border-top-left-radius: 11px;
     right: 0;
     font-size: 25px;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 10px 2px;
+    padding: auto 2px;
     background-color: rgb(255, 255, 255);
     color: black;
     position: absolute;
@@ -348,16 +346,16 @@ export default {
 
   .hamburger-menu {
     position: absolute;
-    top: 1%;
-    right: -3%;
+    top: 1.5%;
+    right: -1%;
     display: flex;
-    /* border: 1px solid grey; */
     padding: 0% 5%;
-    transition: all .4s ease-in-out;
+    transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94)s ease-in-out;
     align-content: center;
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
+    transform: rotate(180deg);
   }
 
   .account-delete {
