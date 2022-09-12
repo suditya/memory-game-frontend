@@ -2,11 +2,6 @@
   <div>
     <NavBar />
     <div class="leader">
-
-      <!-- {{getPlayersRanking()}} -->
-      <!-- <div v-for="(a,index) in playersRanking" :key="index">
-        {{a}}
-    </div> -->
       <h1 class="header">🏆 Global Leader Board 🏆</h1>
     </div>
 
@@ -27,13 +22,13 @@
           {{ country.name }}|{{ country.emoji }} </option>
       </select>
     </div>
-    <nav aria-label="Page navigation">
+    <nav aria-label="pagination-container">
       <ul class="pagination">
         <li class="">
           <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
         </li>
         <li class="">
-          <button type="button" :key="pageNumber" class="page-link" v-for="pageNumber in pages.slice(page-1, page+5)"
+          <button type="button" :key="pageNumber" class="page-link" v-for="pageNumber in pages.slice(page-1, page+3)"
             @click="page = pageNumber"> {{pageNumber}} </button>
         </li>
         <li class="">
@@ -69,7 +64,7 @@
         </tbody>
       </table>
       <table v-else class="rwd-table">
-        <div class="nodata">No result found 🙄</div>
+        <div class="nodata">No result found 😔</div>
       </table>
 
     </div>
@@ -239,6 +234,10 @@ button.page-link {
   font-size: 20px;
   color: black;
   font-weight: 500;
+  border-radius: 5px;
+  background-color: lightgrey;
+  margin-right: 1.5px;
+  padding: 6px 15px;
 }
 
 .page-link:hover {
@@ -249,6 +248,7 @@ button.page-link {
   border-color: #000000;
 
 }
+
 .page-link:focus {
   box-shadow: none;
 }
@@ -321,13 +321,6 @@ button.page-link {
   padding: .5em 1em;
 }
 
-/* @media screen and (max-width: 601px) {
-  .rwd-table tr:nth-child(2) {
-    border-top: none;
-  }
-} */
-
-/* @media screen and (min-width: 300px) { */
 
 .rwd-table th,
 .rwd-table td {
@@ -379,10 +372,11 @@ button.page-link {
 .search-wrapper select,
 .search-wrapper option {
   padding: 8px 12px;
-  color: rgba(0, 0, 0, .70);
-  border: 1px solid rgba(0, 0, 0, .12);
+  color: black;
+  background-color: white;
+  border: 1px solid rgba(100, 100, 100, 0.2);
   transition: .15s all ease-in-out;
-  /* background: white; */
+  /* background: lightgrey; */
   width: 45%;
   margin-top: 5px;
   border-radius: 8px;

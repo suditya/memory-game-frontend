@@ -452,6 +452,8 @@ body {
 
 .restart-button {
   background-color: #3bbb7f;
+  color: white;
+  font-weight: 900;
 }
 
 .restart-button:focus {
@@ -777,7 +779,7 @@ header {
     cursor: pointer;
     display: inline-flex;
     font-family: "JetBrains Mono", monospace;
-    height: 34px;
+    height: 50px;
     justify-content: center;
     line-height: 1;
     list-style: none;
@@ -791,159 +793,153 @@ header {
     user-select: none;
     -webkit-user-select: none;
     white-space: nowrap;
-    font-size: 11px;
+    font-size: 15px;
     align-content: center;
     flex-wrap: wrap;
   }
 
   .restart-button {
     background-color: #3bbb7f;
-  }
-
-  .popup-msg {
-    width: 50%;
-    top: 6%;
-    padding: 15px 5px;
-    right: -5%;
+    color: white;
+    font-weight: 900;
     font-size: 15px;
   }
 
-  .blink {
-    font-size: 5em;
-    color: #00ff88;
-    font-size: 60px;
-    font-weight: 900;
-    text-align: center;
-    -webkit-animation: animate-1ded894d 1.5s linear infinite;
-    animation: animate-1ded894d 1.5s linear infinite;
-  }
 
-  #win-screen {
-    height: 40%;
-    width: 74%;
-    border-radius: 10px;
-    margin: auto auto;
-    background-color: rgba(230, 230, 250, 0.95);
-    position: absolute;
-    left: 15.2%;
-    top: 30%;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.8s;
-  }
+}
 
-  .close-button {
-    top: -31.5%;
-    right: -45.5%;
-    border-radius: 24px;
-  }
+.popup-msg {
+  width: 50%;
+  top: 6%;
+  padding: 15px 5px;
+  right: -5%;
+  font-size: 15px;
+}
 
-  .game-starter {
-    height: 100vh;
-    background-color: black;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
-    align-items: center;
-    flex-wrap: nowrap;
-  }
+.blink {
+  font-size: 5em;
+  color: #00ff88;
+  font-size: 60px;
+  font-weight: 900;
+  text-align: center;
+  -webkit-animation: animate-1ded894d 1.5s linear infinite;
+  animation: animate-1ded894d 1.5s linear infinite;
+}
 
-  /* 
-    .memorycard {
-        box-sizing: border-box;
-        width: 150px;
-        margin: 0 auto;
-        display: flex;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-    } */
+#win-screen {
+  height: 40%;
+  width: 74%;
+  border-radius: 10px;
+  margin: auto auto;
+  background-color: rgba(230, 230, 250, 0.95);
+  position: absolute;
+  left: 15.2%;
+  top: 30%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.8s;
+}
 
-  .start-button {
-    width: 31%;
-  }
+.close-button {
+  top: -31.5%;
+  right: -45.5%;
+  border-radius: 24px;
+}
 
-  .game-heading {
-    color: #d11423;
-    font-size: 70px;
-    font-weight: bold;
-    text-shadow: 2px 1px 2px #37e292;
-    flex-wrap: nowrap;
-    text-align: center;
-  }
+.game-starter {
+  height: 100vh;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  flex-wrap: nowrap;
+}
 
-  .start-button:hover {
-    width: 31%;
-    /* color: #ffffff; */
-    background-color: black;
-    color: #d14949;
-    box-shadow: 0px 0px 20px 10px;
-    transition: 0.4s;
-    border: 2px solid #f7f7f7;
-  }
+.start-button {
+  width: 31%;
+}
 
-  .flip-container {
-    -webkit-perspective: 5000px;
-    -moz-perspective: 5000px;
-    -o-perspective: 5000px;
-    perspective: 5000px;
-    min-height: 120px;
-    cursor: pointer;
-  }
+.game-heading {
+  color: #d11423;
+  font-size: 70px;
+  font-weight: bold;
+  text-shadow: 2px 1px 2px #37e292;
+  flex-wrap: nowrap;
+  text-align: center;
+}
 
-  .front,
-  .back {
-    width: 75px;
-    height: 75px;
-    top: 0;
-    position: absolute;
-    /* margin-right: 35%; */
-    left: 28%;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-  }
+.start-button:hover {
+  width: 31%;
+  /* color: #ffffff; */
+  background-color: black;
+  color: #d14949;
+  box-shadow: 0px 0px 20px 10px;
+  transition: 0.4s;
+  border: 2px solid #f7f7f7;
+}
 
-  .front:hover {
-    background-color: lightcoral;
-    box-shadow: 4px 3px 7px 1px #464141;
-  }
+.flip-container {
+  -webkit-perspective: 5000px;
+  -moz-perspective: 5000px;
+  -o-perspective: 5000px;
+  perspective: 5000px;
+  min-height: 120px;
+  cursor: pointer;
+}
 
-  div#card-box {
-    width: 22%;
-  }
+.front,
+.back {
+  width: 75px;
+  height: 75px;
+  top: 0;
+  position: absolute;
+  /* margin-right: 35%; */
+  left: 28%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
 
-  header {
-    background-color: lightpink;
-    padding: 0px 8px 0px;
-    color: white;
-    height: 20%;
-    /* height: 100vh; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+.front:hover {
+  background-color: lightcoral;
+  box-shadow: 4px 3px 7px 1px #464141;
+}
 
-  .boxing {
-    width: 100%;
-    margin: 18px 0;
-    padding: 15px 0px;
-  }
+div#card-box {
+  width: 22%;
+}
 
-  .shake {
-    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-    transform: translate3d(0, 0, 0);
-  }
+header {
+  background-color: lightpink;
+  padding: 0px 8px 0px;
+  color: white;
+  height: 20%;
+  /* height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-  .mood-emoji {
-    /* line-height: rem; */
-    font-size: 59px;
-    /* margin-bottom: .25rem; */
-  }
+.boxing {
+  width: 100%;
+  margin: 18px 0;
+  padding: 15px 0px;
+}
+
+.shake {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+}
+
+.mood-emoji {
+  /* line-height: rem; */
+  font-size: 59px;
+  /* margin-bottom: .25rem; */
 }
 </style>
