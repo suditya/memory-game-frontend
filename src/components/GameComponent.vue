@@ -15,13 +15,13 @@
         <div class="turns">
           <button class="turn-button" style="cursor:default ; outline: none;"
             :class="finish? 'game-start' : 'game-end'">Turns :
-            <span class="turn-show">{{ turns }}</span>
+            <span :class="finish? 'game-end' : 'game-start'" class="turn-show">{{ turns }}</span>
           </button>
         </div>
         <div class="totalTime">
           <button class="totalTime-button" style="cursor:default ; outline: none;"
             :class="finish||true ? 'game-start' : 'game-end'">Total Time :
-            <span class="time">{{ min }} : {{ sec
+            <span :class="finish? 'game-end' : 'game-start'" class="time">{{ min }} : {{ sec
             }}</span>
           </button>
         </div>
@@ -44,10 +44,10 @@
           matched: card.isMatched,
           shake: animated,
         }" @click="flipCard(card)" @click.prevent="
-                  playSound(
-                    'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3'
-                  )
-                ">
+          playSound(
+            'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3'
+          )
+        ">
         <div class="memorycard">
           <div class="front"></div>
           <div class="back">
@@ -271,14 +271,14 @@ export default {
       }
     },
     reset() {
-      clearInterval(this.interval);
       this.cards.forEach((card) => {
         this.$set(card, "isFlipped", false);
         this.$set(card, "isMatched", false);
       });
+      clearInterval(this.interval);
+      
       setTimeout(() => {
         this.memoryCards = [];
-        // this.memoryCards = this.shuffleArray(this.memoryCards.concat(_.cloneDeep(this.cards), _.cloneDeep(this.cards)));
         this.memoryCards = this.shuffleArray(
           this.memoryCards.concat(
             JSON.parse(JSON.stringify(this.cards)),
@@ -336,6 +336,20 @@ export default {
   right: -2%;
   font-size: 20px;
   color: #000000;
+}
+
+.game-end {
+  background-color: #3bbb7f;
+  color: white;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.game-start {
+  background-color: #f24848;
+  color: white;
+  padding: 8px;
+  border-radius: 6px;
 }
 
 button.close {
@@ -435,10 +449,11 @@ body {
   white-space: nowrap;
   font-size: 22px;
 }
-.restart-button
-{
+
+.restart-button {
   background-color: #3bbb7f;
 }
+
 .restart-button:focus {
   box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
   outline: none;
@@ -780,10 +795,11 @@ header {
     align-content: center;
     flex-wrap: wrap;
   }
-  .restart-button
-{
-  background-color: #3bbb7f;
-}
+
+  .restart-button {
+    background-color: #3bbb7f;
+  }
+
   .popup-msg {
     width: 50%;
     top: 6%;
@@ -809,7 +825,7 @@ header {
     margin: auto auto;
     background-color: rgba(230, 230, 250, 0.95);
     position: absolute;
-    left: 19.2%;
+    left: 15.2%;
     top: 30%;
     text-align: center;
     display: flex;

@@ -18,7 +18,6 @@
         <option value="search by name">search by name</option>
         <option value="search by country">search by country</option>
       </select>
-      <!-- {{ searchCriteria }} -->
       <input v-show="searchCriteria == 'search by name'" type="text" v-model="search" placeholder="search by name" />
       <select v-show="searchCriteria == 'search by country'" name="" class="flags" :required="true"
         v-model="choosenCountry">
@@ -28,9 +27,23 @@
           {{ country.name }}|{{ country.emoji }} </option>
       </select>
     </div>
-
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <li class="">
+          <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
+        </li>
+        <li class="">
+          <button type="button" :key="pageNumber" class="page-link" v-for="pageNumber in pages.slice(page-1, page+5)"
+            @click="page = pageNumber"> {{pageNumber}} </button>
+        </li>
+        <li class="">
+          <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Next </button>
+        </li>
+      </ul>
+    </nav>
     <div class="table-container">
-      <table v-if="filteredPlayersRanking.length > 0" class="rwd-table">
+
+      <table v-if="showPlayers.length > 0" class="rwd-table">
         <tbody>
           <tr>
             <th>Rank</th>
@@ -38,35 +51,34 @@
             <th>Turns</th>
             <th>Time</th>
           </tr>
-          <tr v-for="(playerObj, index) in filteredPlayersRanking" :key="index">
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-if="index == 0">🥇{{ index + 1 }}</th>
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else-if="index == 1">🥈{{ index + 1 }}
+          <tr v-for="(playerObj, index) in showPlayers" :key="index">
+            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-if="getRank(index) == 1">
+              🥇{{getRank(index)}}</th>
+            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else-if="getRank(index) == 2">🥈{{
+            getRank(index)}}
             </th>
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else-if="index == 2">🥉{{ index + 1 }}
+            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else-if="getRank(index) == 3">🥉{{
+            getRank(index) }}
             </th>
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else>{{ index + 1 }}</th>
+            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else>{{ getRank(index) }}</th>
             <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''">
               {{ playerObj.countryEmoji }}{{ playerObj.name }}</th>
             <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''">{{ playerObj.lowScore }}</th>
             <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''">{{ playerObj.time }}</th>
           </tr>
-          <div :class="darkMode ? 'dark-theme' : 'light-theme'"></div>
-          <!-- :class="darkMode ? 'dark-theme' : 'light-theme'" -->
         </tbody>
       </table>
       <table v-else class="rwd-table">
         <div class="nodata">No result found 🙄</div>
       </table>
-    </div>
 
+    </div>
   </div>
 </template>
 
 <script>
-
-// import config from "@/config";
+/*eslint-disable */ 
 import axios from "axios";
-// import from './vue';
 import * as nations from '../data/flags.json'
 import NavBar from "./NavBar.vue";
 export default {
@@ -80,8 +92,13 @@ export default {
       choosenCountry: "",
       searchName: false,
       searchCountry: false,
-      searchCriteria: ""
-    };
+      searchCriteria: "All",
+      page: 1,
+      perPage: 10,
+      pages: [],
+      numberOfPlayers:0,
+      rank:0
+    }
   },
   methods:
   {
@@ -103,41 +120,94 @@ export default {
         console.log(err);
       }
     },
-
-
+   
+    paginate() {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      console.log(page, "page", perPage, "perPage", from , "from", to , "to");
+      return this.filteredPlayersRanking.slice(from, to)
+    },
+    setPages() {
+      let numberOfPages = Math.ceil(this.numberOfPlayers / this.perPage);
+      for (let index = 1; index <= numberOfPages; index++) {
+        this.pages.push(index);
+      }
+    },
+    getRank(index)
+    {
+      return index+1+(this.perPage*(this.page-1))
+    },
   },
   computed: {
+    showPlayers() {
+      return this.paginate();
+    },
     filteredPlayersRanking() {
       let choosenCountryEmoji = this.choosenCountry.split("|")[1];
-      console.log(choosenCountryEmoji);
-      if (this.searchCriteria == "search by name")
-        return this.playersRanking.filter(player => {
+      // console.log(choosenCountryEmoji);
+      if (this.searchCriteria == "search by name"){
+        
+        let res = this.playersRanking.filter(player => {
           return (player.name.toLowerCase().includes(this.search.toLowerCase()));
         })
+        this.numberOfPlayers=res.length;
+        this.setPages();
+        return res;
+      }
       else if (this.searchCriteria == "search by country" && choosenCountryEmoji) {
-        return this.playersRanking.filter(player => {
-
+        let res= this.playersRanking.filter(player => {
           return (player.countryEmoji.includes(choosenCountryEmoji));
         })
+        this.numberOfPlayers=res.length;
+        this.setPages();
+        return res;
       }
       else
-        return this.playersRanking;
-    }
+        {
+          let res= this.playersRanking;
+          this.numberOfPlayers=res.length;
+          this.setPages();
+          return res;
+        }
+    },
+    
 
   },
   created() {
-    console.log("started");
+    // console.log("started");
     this.getPlayersRanking();
+    this.filteredPlayersRanking();
     this.loggedinPlayer = localStorage.getItem('userName');
     // this.insertLeaderBoard();
   },
+  // watch: {
+  //   posts() {
+  //     this.setPages();
+  //   }
+  // },
   components: { NavBar }
 }
 </script>
 
 <style>
+*:focus {
+  outline: none;
+}
+
 .personal {
   background-color: rgb(220 166 141);
+}
+
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+  border-radius: 0.25rem;
+  justify-content: center;
+  margin: 13px auto 0px auto;
+
 }
 
 .header {
@@ -159,6 +229,33 @@ export default {
   display: flex;
   padding: 10px 26px;
   /* height: 100vh; */
+}
+
+button.page-link {
+  display: inline-block;
+}
+
+button.page-link {
+  font-size: 20px;
+  color: black;
+  font-weight: 500;
+}
+
+.page-link:hover {
+  z-index: 2;
+  color: #f4f6f9;
+  text-decoration: none;
+  background-color: #000000;
+  border-color: #000000;
+
+}
+.page-link:focus {
+  box-shadow: none;
+}
+
+.offset {
+  width: 500px !important;
+  margin: 20px auto;
 }
 
 .board-row {
