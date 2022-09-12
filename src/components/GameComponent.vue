@@ -806,7 +806,7 @@ header {
   }
 
 
-}
+
 
 .popup-msg {
   width: 50%;
@@ -941,5 +941,6 @@ header {
   /* line-height: rem; */
   font-size: 59px;
   /* margin-bottom: .25rem; */
+}
 }
 </style>
