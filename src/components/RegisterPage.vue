@@ -27,6 +27,9 @@
                     </label>
                     <input :required="true" class="emailInput" type="email" name="email" v-model="email"
                         placeholder="email id">
+                    <span class="validations" v-if="email.length > 0 && checkInvalidEmail==true ">
+                        <span v-show="!(this.emailRegEx.test(this.email))">email is not valid </span>
+                    </span>
 
                 </div>
 
@@ -50,7 +53,7 @@
                             </button>
                         </div>
                     </div>
-
+                    <!-- {{(this.specialCharRegEx.test(this.password))}} -->
                     <!-- <input :required="true" class="passInput" type="password" name="password" v-model="password"
                         placeholder="password"> -->
                     <span class="validations" v-if="checkInvalidPass==true && password.length > 0 ">
@@ -61,6 +64,8 @@
                                 small letter, </b></span>
                         <span v-show="!(this.numberRegEx.test(this.password))"> Password should have atleast <b> 1
                                 number, </b></span>
+                        <span v-show="!(this.specialCharRegEx.test(this.password))"> Password should have atleast <b>
+                                1 special character </b></span>
                     </span>
                     <span class="validPass" v-if="password.length > 0 && (checkInvalidPass)==false">Password is
                         valid</span>
@@ -74,17 +79,17 @@
                         placeholder="confirm password"> -->
                     <div class="wrapper">
                         <div id="password-input">
-                            <input :required="true" id="pass" v-if="showConfirmPassword==true" type="text" v-model="confirmPassword"
-                                placeholder="confirm password" />
+                            <input :required="true" id="pass" v-if="showConfirmPassword==true" type="text"
+                                v-model="confirmPassword" placeholder="confirm password" />
                             <input :required="true" id="pass" placeholder="confirm password" v-else type="password"
                                 v-model="confirmPassword">
                         </div>
                         <div class="eye-image">
                             <button @click.prevent="showConfirmPassword=showConfirmPassword ^ 1" class="show-hide">
-                                <img v-show="showConfirmPassword==false" class="show-hide-icon" src="../assets/images/view.png"
-                                    alt="show-icon">
-                                <img v-show="showConfirmPassword==true" class="show-hide-icon" src="../assets/images/hide.png"
-                                    alt="hide-icon">
+                                <img v-show="showConfirmPassword==false" class="show-hide-icon"
+                                    src="../assets/images/view.png" alt="show-icon">
+                                <img v-show="showConfirmPassword==true" class="show-hide-icon"
+                                    src="../assets/images/hide.png" alt="hide-icon">
                             </button>
                         </div>
                     </div>
@@ -135,16 +140,17 @@ export default {
             countries: nations,
             upperCharRegEx: /[A-Z]+/,
             lowerCharRegEx: /[a-z]+/,
-            specialCharRegEx: /[A-Z]/,
             numberRegEx: /[0-9]+/,
+            emailRegEx: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+            specialCharRegEx: /[-/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/g,
             error: "",
             successShow: false,
             errorShow: false,
             validPass: true,
             invalidPass: false,
             notValidPass: true,
-            showPassword:false, 
-            showConfirmPassword:false
+            showPassword: false,
+            showConfirmPassword: false
         };
     },
     methods: {
@@ -158,7 +164,6 @@ export default {
             }, 2500)
         },
         async register() {
-            
             const emoji = this.choosenCountry.split('|');
             // console.log(emoji), " emoji of the nation ";
             const credentials = {
@@ -167,7 +172,7 @@ export default {
                 password: this.password,
                 countryEmoji: emoji[1]
             };
-            
+
             try {
                 const result = await axios.post(
                     `${process.env.VUE_APP_BASE_URL}/user/register`,
@@ -178,11 +183,26 @@ export default {
                         },
                     }
                 );
+
+                if (this.checkInvalidEmail || this.checkInvalidPass || (this.password != this.confirmPassword))
+                    this.error = "Invalid EmailId or Invalid Password or Confirm Password is not same as Password ";
+                console.log(this.error, " error ");
+                // if (this.checkInvalidPass)
+                //     this.error += "invalid Password ";
+                // console.log(this.error, " error ");
+                // if (this.password != this.confirmPassword)
+                //     this.error += "confirm Password is not same as Password ";
+                // console.log(this.error, " error ");
+
+                if(this.error.length == 0)
                 this.error = result.data.message;
-                console.log(this.error);
-                if (result.data.message) {
+
+                console.log(this.error, " error ");
+
+
+                if (this.error) {
                     this.popMessage();
-                    
+
                 }
                 else {
                     this.success == true;
@@ -192,9 +212,9 @@ export default {
                     }, 2000);
                     localStorage.removeItem('userName');
                     localStorage.removeItem('countryEmoji');
-                    setTimeout(() => {
-                        this.$router.push({ path: "/login" });
-                    }, 1500)
+                    // setTimeout(() => {
+                    //     this.$router.push({ path: "/login" });
+                    // }, 1500)
 
 
                 }
@@ -210,8 +230,11 @@ export default {
     computed: {
         checkInvalidPass() {
             if (this.password.length == 0) return false;
-            let invalidPass = this.password.length < 8 || (!(this.upperCharRegEx.test(this.password))) || (this.lowerCharRegEx.test(this.password)) || !(this.lowerCharRegEx.test(this.password)) || !(this.numberRegEx.test(this.password));
+            let invalidPass = this.password.length < 8 || (!(this.upperCharRegEx.test(this.password))) || (this.lowerCharRegEx.test(this.password)) || !(this.lowerCharRegEx.test(this.password)) || !(this.numberRegEx.test(this.password) || !(this.specailCharRegEx.test(this.password)));
             return invalidPass;
+        },
+        checkInvalidEmail() {
+            return !(this.emailRegEx.test(this.email));
         }
     }
 };
@@ -365,10 +388,16 @@ p.bottom {
     border: none;
 }
 
-.wrapper:focus,  .wrapper:focus:hover , #pass:focus, #pass:focus:hover, .show-hide:focus, .show-hide-:focus:hover{
+.wrapper:focus,
+.wrapper:focus:hover,
+#pass:focus,
+#pass:focus:hover,
+.show-hide:focus,
+.show-hide-:focus:hover {
     outline: none;
-    border:none;
+    border: none;
 }
+
 .eye-image {
     width: 12%;
     margin-left: 3px;
@@ -446,8 +475,8 @@ p.bottom {
     #submit {
         font-size: 17px;
     }
-    .wrapper
-    {
+
+    .wrapper {
         width: 250%;
     }
 

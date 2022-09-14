@@ -45,9 +45,10 @@
           shake: animated,
         }" @click="flipCard(card)" @click.prevent="
           playSound(
-            'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3'
+            ''
           )
         ">
+        <!-- 'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3' -->
         <div class="memorycard">
           <div class="front"></div>
           <div class="back">
@@ -60,9 +61,9 @@
     <div v-show="showWindow == true" id="win-screen" class="">
       <h3>🎯 Nailed It! 🎯</h3>
       <button @click.prevent="closeWindow()" class="close-button">X</button>
-      <div class="score click-count">Turns: {{ this.turns }}</div>
+      <div class="score click-count">Turns: <b>{{ this.turns }}</b></div>
       <div class="score low-score">
-        Time: {{ this.totalTime.minutes }} : {{ this.totalTime.seconds }}
+        Time: <b> {{ this.totalTime.minutes }} : {{ this.totalTime.seconds }}</b>
       </div>
       <div @click="reset()" id="replay-button">Play Again?</div>
       <div v-if="isLoggedIn==true" class="leaderboard-link">See yourself on the <router-link to="/leaderboard">
@@ -380,7 +381,7 @@ body {
 
 .close-button {
   position: relative;
-  top: -31.5%;
+  top: -20.5%;
   right: -45.5%;
   padding: 0px 10px;
   background-color: black;
@@ -493,16 +494,6 @@ body {
   }
 }
 
-.memorycard {
-  box-sizing: border-box;
-  width: 150px;
-  margin: 0 auto;
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  /* position: relative; */
-}
-
 .start-button {
   padding: 21px 0px;
   width: 12%;
@@ -536,6 +527,16 @@ body {
   perspective: 1000px;
   min-height: 120px;
   cursor: pointer;
+}
+
+.memorycard {
+  box-sizing: border-box;
+  width: 150px;
+  margin: 0 auto;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  /* position: relative; */
 }
 
 .front,

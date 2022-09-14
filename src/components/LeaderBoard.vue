@@ -22,6 +22,9 @@
           {{ country.name }}|{{ country.emoji }} </option>
       </select>
     </div>
+    <!-- <div class="loading">
+      <img src="../assets/images/image_processing20210906-11731-hat7da.gif" alt="">
+    </div> -->
     <nav aria-label="pagination-container">
       <ul class="pagination">
         <li class="">
@@ -36,6 +39,7 @@
         </li>
       </ul>
     </nav>
+    <!-- {{showPlayers}} -->
     <div class="table-container">
 
       <table v-if="showPlayers.length > 0" class="rwd-table">
@@ -72,7 +76,7 @@
 </template>
 
 <script>
-/*eslint-disable */ 
+/*eslint-disable */
 import axios from "axios";
 import * as nations from '../data/flags.json'
 import NavBar from "./NavBar.vue";
@@ -91,8 +95,8 @@ export default {
       page: 1,
       perPage: 10,
       pages: [],
-      numberOfPlayers:0,
-      rank:0
+      numberOfPlayers: 0,
+      rank: 0
     }
   },
   methods:
@@ -115,13 +119,13 @@ export default {
         console.log(err);
       }
     },
-   
+
     paginate() {
       let page = this.page;
       let perPage = this.perPage;
       let from = page * perPage - perPage;
       let to = page * perPage;
-      console.log(page, "page", perPage, "perPage", from , "from", to , "to");
+      console.log(page, "page", perPage, "perPage", from, "from", to, "to");
       return this.filteredPlayersRanking.slice(from, to)
     },
     setPages() {
@@ -130,9 +134,8 @@ export default {
         this.pages.push(index);
       }
     },
-    getRank(index)
-    {
-      return index+1+(this.perPage*(this.page-1))
+    getRank(index) {
+      return index + 1 + (this.perPage * (this.page - 1))
     },
   },
   computed: {
@@ -140,48 +143,41 @@ export default {
       return this.paginate();
     },
     filteredPlayersRanking() {
+      this.loggedinPlayer = localStorage.getItem('userName');
       let choosenCountryEmoji = this.choosenCountry.split("|")[1];
       // console.log(choosenCountryEmoji);
-      if (this.searchCriteria == "search by name"){
-        
+      if (this.searchCriteria == "search by name") {
+
         let res = this.playersRanking.filter(player => {
           return (player.name.toLowerCase().includes(this.search.toLowerCase()));
         })
-        this.numberOfPlayers=res.length;
+        this.numberOfPlayers = res.length;
         this.setPages();
         return res;
       }
       else if (this.searchCriteria == "search by country" && choosenCountryEmoji) {
-        let res= this.playersRanking.filter(player => {
+        let res = this.playersRanking.filter(player => {
           return (player.countryEmoji.includes(choosenCountryEmoji));
         })
-        this.numberOfPlayers=res.length;
+        this.numberOfPlayers = res.length;
         this.setPages();
         return res;
       }
-      else
-        {
-          let res= this.playersRanking;
-          this.numberOfPlayers=res.length;
-          this.setPages();
-          return res;
-        }
+      else {
+        let res = this.playersRanking;
+        this.numberOfPlayers = res.length;
+        this.setPages();
+        return res;
+      }
     },
-    
+
 
   },
   created() {
-    // console.log("started");
     this.getPlayersRanking();
     this.filteredPlayersRanking();
-    this.loggedinPlayer = localStorage.getItem('userName');
-    // this.insertLeaderBoard();
+
   },
-  // watch: {
-  //   posts() {
-  //     this.setPages();
-  //   }
-  // },
   components: { NavBar }
 }
 </script>
