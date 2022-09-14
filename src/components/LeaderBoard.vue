@@ -4,7 +4,6 @@
     <div class="leader">
       <h1 class="header">🏆 Global Leader Board 🏆</h1>
     </div>
-
     <div class="search-wrapper">
       <select v-model="searchCriteria" class="searchCriteria" style="width:32%; margin-right:1%" name="" id="">
         <option value="" disabled selected>search
@@ -22,55 +21,57 @@
           {{ country.name }}|{{ country.emoji }} </option>
       </select>
     </div>
-    <!-- <div class="loading">
+    <div class="loading" v-if="loadingShow==true">
       <img src="../assets/images/image_processing20210906-11731-hat7da.gif" alt="">
-    </div> -->
-    <nav aria-label="pagination-container">
-      <ul class="pagination">
-        <li class="">
-          <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
-        </li>
-        <li class="">
-          <button type="button" :key="pageNumber" class="page-link" v-for="pageNumber in pages.slice(page-1, page+3)"
-            @click="page = pageNumber"> {{pageNumber}} </button>
-        </li>
-        <li class="">
-          <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Next </button>
-        </li>
-      </ul>
-    </nav>
-    <!-- {{showPlayers}} -->
-    <div class="table-container">
+    </div>
+    <div v-else>
+      <nav aria-label="pagination-container">
+        <ul class="pagination">
+          <li class="">
+            <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
+          </li>
+          <li class="">
+            <button type="button" :key="pageNumber" class="page-link" v-for="pageNumber in pages.slice(page-1, page+3)"
+              @click="page = pageNumber"> {{pageNumber}} </button>
+          </li>
+          <li class="">
+            <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Next </button>
+          </li>
+        </ul>
+      </nav>
+      <!-- {{showPlayers}} -->
+      <div class="table-container">
 
-      <table v-if="showPlayers.length > 0" class="rwd-table">
-        <tbody>
-          <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Turns</th>
-            <th>Time</th>
-          </tr>
-          <tr v-for="(playerObj, index) in showPlayers" :key="index">
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-if="getRank(index) == 1">
-              🥇{{getRank(index)}}</th>
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else-if="getRank(index) == 2">🥈{{
-            getRank(index)}}
-            </th>
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else-if="getRank(index) == 3">🥉{{
-            getRank(index) }}
-            </th>
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else>{{ getRank(index) }}</th>
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''">
-              {{ playerObj.countryEmoji }}{{ playerObj.name }}</th>
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''">{{ playerObj.lowScore }}</th>
-            <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''">{{ playerObj.time }}</th>
-          </tr>
-        </tbody>
-      </table>
-      <table v-else class="rwd-table">
-        <div class="nodata">No result found 😔</div>
-      </table>
+        <table v-if="showPlayers.length > 0" class="rwd-table">
+          <tbody>
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Turns</th>
+              <th>Time</th>
+            </tr>
+            <tr v-for="(playerObj, index) in showPlayers" :key="index">
+              <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-if="getRank(index) == 1">
+                🥇{{getRank(index)}}</th>
+              <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else-if="getRank(index) == 2">🥈{{
+              getRank(index)}}
+              </th>
+              <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else-if="getRank(index) == 3">🥉{{
+              getRank(index) }}
+              </th>
+              <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''" v-else>{{ getRank(index) }}</th>
+              <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''">
+                {{ playerObj.countryEmoji }}{{ playerObj.name }}</th>
+              <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''">{{ playerObj.lowScore }}</th>
+              <th :class="(playerObj.name == loggedinPlayer) ? 'personal' : ''">{{ playerObj.time }}</th>
+            </tr>
+          </tbody>
+        </table>
+        <table v-else class="rwd-table">
+          <div class="nodata">No result found 😔</div>
+        </table>
 
+      </div>
     </div>
   </div>
 </template>
@@ -96,7 +97,8 @@ export default {
       perPage: 10,
       pages: [],
       numberOfPlayers: 0,
-      rank: 0
+      rank: 0,
+      loadingShow:true
     }
   },
   methods:
@@ -104,9 +106,15 @@ export default {
 
     async getPlayersRanking() {
       try {
+        
         const result = await axios.get(
           `${process.env.VUE_APP_BASE_URL}/user/getLeaderBoard`
         );
+        // setTimeout(()=>
+        // {
+        //   this.loadingShow=false;
+        // },4000)
+        this.loadingShow=false;
         console.log(result);
 
         this.playersRanking = result.data;
@@ -125,7 +133,7 @@ export default {
       let perPage = this.perPage;
       let from = page * perPage - perPage;
       let to = page * perPage;
-      console.log(page, "page", perPage, "perPage", from, "from", to, "to");
+      // console.log(page, "page", perPage, "perPage", from, "from", to, "to");
       return this.filteredPlayersRanking.slice(from, to)
     },
     setPages() {
@@ -154,20 +162,25 @@ export default {
         this.numberOfPlayers = res.length;
         this.setPages();
         return res;
+
       }
       else if (this.searchCriteria == "search by country" && choosenCountryEmoji) {
+
         let res = this.playersRanking.filter(player => {
           return (player.countryEmoji.includes(choosenCountryEmoji));
         })
         this.numberOfPlayers = res.length;
         this.setPages();
         return res;
+
       }
       else {
+
         let res = this.playersRanking;
         this.numberOfPlayers = res.length;
         this.setPages();
         return res;
+
       }
     },
 
@@ -185,6 +198,13 @@ export default {
 <style>
 *:focus {
   outline: none;
+}
+
+.loading {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  transition: all .8s linear;
 }
 
 .personal {

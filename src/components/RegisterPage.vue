@@ -27,7 +27,7 @@
                     </label>
                     <input :required="true" class="emailInput" type="email" name="email" v-model="email"
                         placeholder="email id">
-                    <span class="validations" v-if="email.length > 0 && checkInvalidEmail==true ">
+                    <span class="validations" v-if="email.length > 0">
                         <span v-show="!(this.emailRegEx.test(this.email))">email is not valid </span>
                     </span>
 
@@ -56,7 +56,7 @@
                     <!-- {{(this.specialCharRegEx.test(this.password))}} -->
                     <!-- <input :required="true" class="passInput" type="password" name="password" v-model="password"
                         placeholder="password"> -->
-                    <span class="validations" v-if="checkInvalidPass==true && password.length > 0 ">
+                    <span class="validations" v-if="password.length > 0 ">
                         <span v-show="this.password.length < 8">Password should have atleast <b>8 characters</b> </span>
                         <span v-show="!(this.upperCharRegEx.test(this.password))"> Password should have atleast <b>1
                                 capital letter</b> ,</span>
@@ -142,7 +142,7 @@ export default {
             lowerCharRegEx: /[a-z]+/,
             numberRegEx: /[0-9]+/,
             emailRegEx: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-            specialCharRegEx: /[-/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/g,
+            specialCharRegEx: /[-/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/,
             error: "",
             successShow: false,
             errorShow: false,
@@ -161,6 +161,7 @@ export default {
             this.errorShow = true;
             setTimeout(() => {
                 this.errorShow = false;
+
             }, 2500)
         },
         async register() {
@@ -174,49 +175,40 @@ export default {
             };
 
             try {
-                const result = await axios.post(
-                    `${process.env.VUE_APP_BASE_URL}/user/register`,
-                    credentials,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-
-                if (this.checkInvalidEmail || this.checkInvalidPass || (this.password != this.confirmPassword))
+                this.error = "";
+                if (this.checkInvalidEmail() || this.checkInvalidPass())
                     this.error = "Invalid EmailId or Invalid Password or Confirm Password is not same as Password ";
-                console.log(this.error, " error ");
-                // if (this.checkInvalidPass)
-                //     this.error += "invalid Password ";
-                // console.log(this.error, " error ");
-                // if (this.password != this.confirmPassword)
-                //     this.error += "confirm Password is not same as Password ";
-                // console.log(this.error, " error ");
 
-                if(this.error.length == 0)
-                this.error = result.data.message;
-
-                console.log(this.error, " error ");
-
-
-                if (this.error) {
+                if (this.error.length > 0) {   //if there is invalid data entered
                     this.popMessage();
-
                 }
                 else {
-                    this.success == true;
-                    this.successShow = true;
-                    setTimeout(() => {
-                        this.successShow = false;
-                    }, 2000);
-                    localStorage.removeItem('userName');
-                    localStorage.removeItem('countryEmoji');
-                    // setTimeout(() => {
-                    //     this.$router.push({ path: "/login" });
-                    // }, 1500)
-
-
+                    const result = await axios.post(
+                        `${process.env.VUE_APP_BASE_URL}/user/register`,
+                        credentials,
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        }
+                    );
+                    // console.log(result)
+                    this.error=result.data.message;
+                    if (this.error) {
+                        this.popMessage();
+                    }
+                    else {
+                        this.success == true;
+                        this.successShow = true;
+                        setTimeout(() => {
+                            this.successShow = false;
+                        }, 2000);
+                        localStorage.removeItem('userName');
+                        localStorage.removeItem('countryEmoji');
+                        setTimeout(() => {
+                            this.$router.push({ path: "/login" });
+                        }, 1500)
+                    }
                 }
             }
             catch (err) {
@@ -225,17 +217,32 @@ export default {
             }
 
         },
+        checkInvalidPass() {
+
+            let checkLength = (this.password.length >= 8);
+            if (checkLength == false) return true;
+            let upper = this.upperCharRegEx.test(this.password);
+            if (upper == false) return true;
+            let lower = this.lowerCharRegEx.test(this.password);
+            if (lower == false) return true;
+            let number = this.numberRegEx.test(this.password);
+            if (number == false) return true;
+            let special = this.specialCharRegEx.test(this.password);
+            if (special == false) return true;
+            let matchPassword = this.confirmPassword == this.password;
+            if (matchPassword == false) return true;
+
+            return false
+        },
+        checkInvalidEmail() {
+            const invalidEmail = !(this.emailRegEx.test(this.email));
+            return invalidEmail;
+        }
+
     },
     components: { NavBar },
     computed: {
-        checkInvalidPass() {
-            if (this.password.length == 0) return false;
-            let invalidPass = this.password.length < 8 || (!(this.upperCharRegEx.test(this.password))) || (this.lowerCharRegEx.test(this.password)) || !(this.lowerCharRegEx.test(this.password)) || !(this.numberRegEx.test(this.password) || !(this.specailCharRegEx.test(this.password)));
-            return invalidPass;
-        },
-        checkInvalidEmail() {
-            return !(this.emailRegEx.test(this.email));
-        }
+
     }
 };
 </script>
