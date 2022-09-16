@@ -27,6 +27,7 @@
                     </label>
                     <input :required="true" class="emailInput" type="email" name="email" v-model="email"
                         placeholder="email id">
+                    <!-- Validating the Email -->
                     <span class="validations" v-if="email.length > 0">
                         <span v-show="!(this.emailRegEx.test(this.email))">email is not valid </span>
                     </span>
@@ -53,9 +54,7 @@
                             </button>
                         </div>
                     </div>
-                    <!-- {{(this.specialCharRegEx.test(this.password))}} -->
-                    <!-- <input :required="true" class="passInput" type="password" name="password" v-model="password"
-                        placeholder="password"> -->
+                   <!-- Validating Passwords -->
                     <span class="validations" v-if="password.length > 0 ">
                         <span v-show="this.password.length < 8">Password should have atleast <b>8 characters</b> </span>
                         <span v-show="!(this.upperCharRegEx.test(this.password))"> Password should have atleast <b>1
@@ -75,8 +74,6 @@
                     <label for="password">
                         <p>Confirm Password 🔑</p>
                     </label>
-                    <!-- <input :required="true" class="passInput" id="confirm-password-input" type="password" name="password" v-model="confirmPassword"
-                        placeholder="confirm password"> -->
                     <div class="wrapper">
                         <div id="password-input">
                             <input :required="true" id="pass" v-if="showConfirmPassword==true" type="text"
@@ -110,7 +107,6 @@
                 <input class="submitInput" id="submit" type="submit" value="register">
                 <p class="bottom">
                     Already have an account?
-                    <!-- <a href="/">Login here</a> -->
                     <router-link to="/login">Login here</router-link>
                 </p>
             </form>
@@ -124,7 +120,6 @@
 import axios from "axios";
 import NavBar from './NavBar.vue';
 import * as nations from '../data/flags.json'
-console.log(nations);
 export default {
     name: "registerPage",
     data() {
@@ -166,7 +161,6 @@ export default {
         },
         async register() {
             const emoji = this.choosenCountry.split('|');
-            // console.log(emoji), " emoji of the nation ";
             const credentials = {
                 name: this.fullName,
                 email: this.email,
@@ -192,7 +186,6 @@ export default {
                             },
                         }
                     );
-                    // console.log(result)
                     this.error=result.data.message;
                     if (this.error) {
                         this.popMessage();
@@ -240,10 +233,7 @@ export default {
         }
 
     },
-    components: { NavBar },
-    computed: {
-
-    }
+    components: { NavBar }
 };
 </script>
 <style scoped>
@@ -262,11 +252,8 @@ export default {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
     margin: 25px;
-    /* left: 2%; */
     border-radius: 36px;
     right: 1%;
-    /* color: #D8000C;
-    background-color: #FFBABA; */
 }
 
 .success-msg {
@@ -295,7 +282,6 @@ button.close {
     color: #09e868;
     -webkit-appearance: none;
     -moz-appearance: none;
-    /* appearance: none; */
 }
 
 .form-container {
@@ -414,7 +400,6 @@ p.bottom {
     width: 80%;
     background: none;
     border: none;
-    /* object-fit: cover; */
     max-width: 45px;
 }
 
@@ -427,9 +412,6 @@ p.bottom {
     width: 100%;
     border: none;
     border-radius: 10px;
-    /* border-right: none; */
-    /* border-bottom-right-radius: 0px;
-    border-top-right-radius: 0px; */
 }
 
 .password {

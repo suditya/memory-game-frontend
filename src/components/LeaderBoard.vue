@@ -39,9 +39,8 @@
           </li>
         </ul>
       </nav>
-      <!-- {{showPlayers}} -->
+      <!-- showing all the rankings and the players with their scores-->
       <div class="table-container">
-
         <table v-if="showPlayers.length > 0" class="rwd-table">
           <tbody>
             <tr>
@@ -98,7 +97,7 @@ export default {
       pages: [],
       numberOfPlayers: 0,
       rank: 0,
-      loadingShow:true
+      loadingShow: true
     }
   },
   methods:
@@ -106,21 +105,15 @@ export default {
 
     async getPlayersRanking() {
       try {
-        
+
         const result = await axios.get(
           `${process.env.VUE_APP_BASE_URL}/user/getLeaderBoard`
         );
-        // setTimeout(()=>
-        // {
-        //   this.loadingShow=false;
-        // },4000)
-        this.loadingShow=false;
-        console.log(result);
-
+        setTimeout(() => {
+          this.loadingShow = false;
+        }, 1400)
         this.playersRanking = result.data;
-
         this.playersRanking.sort((a, b) => a.lowScore - b.lowScore);
-        console.log(this.playersRanking, "players ranking");
 
       }
       catch (err) {
@@ -133,7 +126,6 @@ export default {
       let perPage = this.perPage;
       let from = page * perPage - perPage;
       let to = page * perPage;
-      // console.log(page, "page", perPage, "perPage", from, "from", to, "to");
       return this.filteredPlayersRanking.slice(from, to)
     },
     setPages() {
@@ -153,7 +145,6 @@ export default {
     filteredPlayersRanking() {
       this.loggedinPlayer = localStorage.getItem('userName');
       let choosenCountryEmoji = this.choosenCountry.split("|")[1];
-      // console.log(choosenCountryEmoji);
       if (this.searchCriteria == "search by name") {
 
         let res = this.playersRanking.filter(player => {
@@ -189,15 +180,20 @@ export default {
   created() {
     this.getPlayersRanking();
     this.filteredPlayersRanking();
-
   },
   components: { NavBar }
 }
 </script>
 
 <style>
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:600,700';
+
 *:focus {
   outline: none;
+}
+
+* {
+  font-family: 'Open Sans', sans-serif;
 }
 
 .loading {
@@ -289,12 +285,6 @@ button.page-link {
   margin-right: 1%;
 }
 
-@import 'https://fonts.googleapis.com/css?family=Open+Sans:600,700';
-
-* {
-  font-family: 'Open Sans', sans-serif;
-}
-
 .rwd-table {
   margin: auto;
   width: 100%;
@@ -366,7 +356,6 @@ button.page-link {
   justify-content: center;
   align-content: center;
   align-items: center;
-  /* flex-direction: column; */
 }
 
 .nodata {
@@ -377,13 +366,6 @@ button.page-link {
   font-size: 23px;
 }
 
-/* .flags {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 9px;
-} */
-
 .search-wrapper input,
 .search-wrapper select,
 .search-wrapper option {
@@ -392,24 +374,12 @@ button.page-link {
   background-color: white;
   border: 1px solid rgba(100, 100, 100, 0.2);
   transition: .15s all ease-in-out;
-  /* background: lightgrey; */
   width: 45%;
   margin-top: 5px;
   border-radius: 8px;
 
 }
 
-/* .search-wrapper input:focus {
-  outline: none;
-  
-  padding: 12px 12px;
-  color: rgba(0, 0, 0, .70);
-  border: 1px solid rgba(0, 0, 0, 0.924);
-} */
-
-
-
-/* } */
 @media screen and (max-width:800px) {
   .table-container {
     width: 100%;
@@ -422,6 +392,4 @@ button.page-link {
     font-size: 170%;
   }
 }
-
-/* } */
 </style>

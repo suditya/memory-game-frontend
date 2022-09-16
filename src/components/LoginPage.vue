@@ -7,7 +7,6 @@
            
             <h1 class="heading">Login</h1>
             <form @submit.prevent="login()" class="form-container">
-
                 <hr>
                 
                 <div v-show="errorShow == true" class="popup-msg">
@@ -48,9 +47,6 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- <input :required="true" class="passInput" type="password" name="password" v-model="password"
-                        placeholder="password"> -->
                 </div>
                 <input class="submitInput" id="submit" type="submit" value="login">
                 <p class="bottom">
@@ -167,7 +163,6 @@ export default {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    /* transition: all 400; */
 }
 
 .popup-msg,
@@ -179,11 +174,8 @@ export default {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
     margin: 25px;
-    /* left: 2%; */
     border-radius: 36px;
     right: 1%;
-    /* color: #D8000C;
-    background-color: #FFBABA; */
 }
 
 .success-msg {
@@ -207,7 +199,6 @@ button.close {
     color: #09e868;
     -webkit-appearance: none;
     -moz-appearance: none;
-    /* appearance: none; */
 }
 
 
@@ -244,7 +235,6 @@ input {
     padding: 18px 18px;
     border-radius: 10px;
     width: 65%;
-    /* background-color: blue; */
 }
 
 #submit {
@@ -265,7 +255,6 @@ input {
 label {
     font-size: 25px;
     font-weight: bold;
-    /* text-align: center; */
 }
 
 p.bottom {
@@ -310,7 +299,6 @@ p.bottom {
     width: 80%;
     background: none;
     border: none;
-    /* object-fit: cover; */
     max-width: 45px;
 }
 
@@ -321,9 +309,6 @@ p.bottom {
     width: 100%;
     border: none;
     border-radius: 10px;
-    /* border-right: none; */
-    /* border-bottom-right-radius: 0px;
-    border-top-right-radius: 0px; */
 }
 
 @media screen and (max-width:800px) {
@@ -349,11 +334,8 @@ p.bottom {
         font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
         font-weight: 300;
         margin: 25px;
-        /* left: 2%; */
         border-radius: 36px;
         right: -2%;
-        /* color: #D8000C;
-    background-color: #FFBABA; */
     }
     .wrapper
     {

@@ -3,12 +3,13 @@
     <NavBar />
 
     <div v-show="gameStarter == true" class="game-starter">
-      <!-- <h1>Let's Play 🤩</h1> -->
+
       <h1 class="blink">{{ msg1 }} {{ msg2 }} {{ msg3 }} {{ msg4 }}</h1>
       <h1 class="game-heading">{{ heading1 }} {{ heading2 }}</h1>
       <h1 class="game-heading">{{ heading3 }}</h1>
       <h1 class="game-icon blink">{{ heading4 }}</h1>
       <button @click="startGame()" class="start-button">play</button>
+
     </div>
     <div v-show="gameStarter == false" class="game-container">
       <div class="turns-class">
@@ -36,7 +37,6 @@
       <button class="close" @click="closePopup = true">X</button>
       <p>Please login yourself to save your scores</p>
     </div>
-
     <div v-show="gameStarter == false" class="row boxing">
       <div v-for="(card, index) in memoryCards" :key="index" id="card-box"
         class="col-md-3 col-sm-4 col-xs-4 mb-2 flip-container" :class="{
@@ -45,10 +45,9 @@
           shake: animated,
         }" @click="flipCard(card)" @click.prevent="
           playSound(
-            ''
+            'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3'
           )
         ">
-        <!-- 'http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3' -->
         <div class="memorycard">
           <div class="front"></div>
           <div class="back">
@@ -58,7 +57,7 @@
       </div>
     </div>
 
-    <div v-show="showWindow == true" id="win-screen" class="">
+    <div v-show="showWindow == true" class="popup">
       <h3>🎯 Nailed It! 🎯</h3>
       <button @click.prevent="closeWindow()" class="close-button">X</button>
       <div class="score click-count">Turns: <b>{{ this.turns }}</b></div>
@@ -77,6 +76,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import "../assets/style.css";
 
 import MemoryCardGameHeader from "./MemoryCardGameHeader.vue";
@@ -112,7 +112,6 @@ export default {
       showWindow: false,
       gameStarter: true,
       isLoggedIn: true,
-      /* eslint-disable */
       cards: [
         { name: "gorilla", emoji: "🦍" },
         { name: "cat", emoji: "🐈" },
@@ -184,7 +183,7 @@ export default {
         this.match(card);
       }
     },
-    shuffleArray(array) {
+    shuffleArray(array) {                               //everytime shuffling all the cards
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
@@ -206,13 +205,9 @@ export default {
           if (this.memoryCards.every((card) => card.isMatched === true)) {
             this.finish = true;
             this.showWindow = true;
-            // console.log("hello : ",this.i++);
             const name = localStorage.getItem("userName");
 
             if (name) this.insertLeaderBoard();
-            else {
-              console.log("login urself to save the scores");
-            }
           }
         }, 400);
       } else {
@@ -277,7 +272,7 @@ export default {
         this.$set(card, "isMatched", false);
       });
       clearInterval(this.interval);
-      
+
       setTimeout(() => {
         this.memoryCards = [];
         this.memoryCards = this.shuffleArray(
@@ -332,7 +327,6 @@ export default {
   font-weight: 300;
   margin: 25px;
   text-align: center;
-  /* left: 2%; */
   border-radius: 36px;
   right: -2%;
   font-size: 20px;
@@ -388,7 +382,6 @@ body {
   color: white;
   font-size: 27px;
   border-radius: 23px;
-  /* border-radius: 12px; */
 }
 
 .game-container {
@@ -473,7 +466,6 @@ body {
 }
 
 .turns-class {
-  /* d-flex flex-row justify-content-center py-3 */
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -536,7 +528,6 @@ body {
   display: flex;
   text-align: center;
   justify-content: center;
-  /* position: relative; */
 }
 
 .front,
@@ -624,7 +615,6 @@ header {
   padding: 0px 8px 0px;
   color: white;
   height: 20%;
-  /* height: 100vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -685,7 +675,31 @@ header {
   }
 }
 
-#win-screen {
+#restart-popup {
+  z-index: 20;
+  background-color: lightcoral;
+  color: white;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  flex-direction: column;
+  left: 23%;
+  display: flex;
+  padding: 2%;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  width: 57%;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.popup {
   height: 32%;
   width: 50%;
   border-radius: 10px;
@@ -701,11 +715,6 @@ header {
   transition: all 0.8s;
 }
 
-/* #win-screen.visible {
-    visibility: visible;
-    opacity: 1;
-    transition: all 0.8s;
-    } */
 .game-starter {
   height: 100vh;
   background-color: black;
@@ -809,139 +818,133 @@ header {
 
 
 
-.popup-msg {
-  width: 50%;
-  top: 6%;
-  padding: 15px 5px;
-  right: -5%;
-  font-size: 15px;
-}
+  .popup-msg {
+    width: 50%;
+    top: 6%;
+    padding: 15px 5px;
+    right: -5%;
+    font-size: 15px;
+  }
 
-.blink {
-  font-size: 5em;
-  color: #00ff88;
-  font-size: 60px;
-  font-weight: 900;
-  text-align: center;
-  -webkit-animation: animate-1ded894d 1.5s linear infinite;
-  animation: animate-1ded894d 1.5s linear infinite;
-}
+  .blink {
+    font-size: 5em;
+    color: #00ff88;
+    font-size: 60px;
+    font-weight: 900;
+    text-align: center;
+    -webkit-animation: animate-1ded894d 1.5s linear infinite;
+    animation: animate-1ded894d 1.5s linear infinite;
+  }
 
-#win-screen {
-  height: 40%;
-  width: 74%;
-  border-radius: 10px;
-  margin: auto auto;
-  background-color: rgba(230, 230, 250, 0.95);
-  position: absolute;
-  left: 15.2%;
-  top: 30%;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.8s;
-}
+  #win-screen {
+    height: 40%;
+    width: 74%;
+    border-radius: 10px;
+    margin: auto auto;
+    background-color: rgba(230, 230, 250, 0.95);
+    position: absolute;
+    left: 15.2%;
+    top: 30%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.8s;
+  }
 
-.close-button {
-  top: -31.5%;
-  right: -45.5%;
-  border-radius: 24px;
-}
+  .close-button {
+    top: -31.5%;
+    right: -45.5%;
+    border-radius: 24px;
+  }
 
-.game-starter {
-  height: 100vh;
-  background-color: black;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  /* justify-content: center; */
-  align-items: center;
-  flex-wrap: nowrap;
-}
+  .game-starter {
+    height: 100vh;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
 
-.start-button {
-  width: 31%;
-}
+  .start-button {
+    width: 31%;
+  }
 
-.game-heading {
-  color: #d11423;
-  font-size: 70px;
-  font-weight: bold;
-  text-shadow: 2px 1px 2px #37e292;
-  flex-wrap: nowrap;
-  text-align: center;
-}
+  .game-heading {
+    color: #d11423;
+    font-size: 70px;
+    font-weight: bold;
+    text-shadow: 2px 1px 2px #37e292;
+    flex-wrap: nowrap;
+    text-align: center;
+  }
 
-.start-button:hover {
-  width: 31%;
-  /* color: #ffffff; */
-  background-color: black;
-  color: #d14949;
-  box-shadow: 0px 0px 20px 10px;
-  transition: 0.4s;
-  border: 2px solid #f7f7f7;
-}
+  .start-button:hover {
+    width: 31%;
+    background-color: black;
+    color: #d14949;
+    box-shadow: 0px 0px 20px 10px;
+    transition: 0.4s;
+    border: 2px solid #f7f7f7;
+  }
 
-.flip-container {
-  -webkit-perspective: 5000px;
-  -moz-perspective: 5000px;
-  -o-perspective: 5000px;
-  perspective: 5000px;
-  min-height: 120px;
-  cursor: pointer;
-}
+  .flip-container {
+    -webkit-perspective: 5000px;
+    -moz-perspective: 5000px;
+    -o-perspective: 5000px;
+    perspective: 5000px;
+    min-height: 120px;
+    cursor: pointer;
+  }
 
-.front,
-.back {
-  width: 75px;
-  height: 75px;
-  top: 0;
-  position: absolute;
-  /* margin-right: 35%; */
-  left: 28%;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-}
+  .front,
+  .back {
+    width: 75px;
+    height: 75px;
+    top: 0;
+    position: absolute;
+    left: 28%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
 
-.front:hover {
-  background-color: lightcoral;
-  box-shadow: 4px 3px 7px 1px #464141;
-}
+  .front:hover {
+    background-color: lightcoral;
+    box-shadow: 4px 3px 7px 1px #464141;
+  }
 
-div#card-box {
-  width: 22%;
-}
+  div#card-box {
+    width: 22%;
+  }
 
-header {
-  background-color: lightpink;
-  padding: 0px 8px 0px;
-  color: white;
-  height: 20%;
-  /* height: 100vh; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+  header {
+    background-color: lightpink;
+    padding: 0px 8px 0px;
+    color: white;
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
-.boxing {
-  width: 100%;
-  margin: 18px 0;
-  padding: 15px 0px;
-}
+  .boxing {
+    width: 100%;
+    margin: 18px 0;
+    padding: 15px 0px;
+  }
 
-.shake {
-  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-  transform: translate3d(0, 0, 0);
-}
+  .shake {
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    transform: translate3d(0, 0, 0);
+  }
 
-.mood-emoji {
-  /* line-height: rem; */
-  font-size: 59px;
-  /* margin-bottom: .25rem; */
-}
+  .mood-emoji {
+    font-size: 59px;
+  }
 }
 </style>
