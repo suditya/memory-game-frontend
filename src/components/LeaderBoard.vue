@@ -46,14 +46,14 @@
       <nav aria-label="pagination-container">
         <ul class="pagination">
           <li class="">
-            <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
+            <button type="button" class="page-link"  :disabled="page==1" @click="page--"> Previous </button>
           </li>
           <!-- <li class="">
-            <button type="button" :key="pageNumber" class="page-link" v-for="pageNumber in pages.slice(page-1, page+2)"
+            <button type="button" :key="pageNumber" class="page-link" v-for="pageNumber in pages.slice(page-1, page+1)"
               @click="page = pageNumber"> {{pageNumber}} </button>
           </li> -->
           <li class="">
-            <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Next </button>
+            <button type="button" @click="page++" :disabled="page >= pages.length" class="page-link"> Next </button>
           </li>
         </ul>
       </nav>
@@ -98,7 +98,7 @@
 import { getEasyLeaderboard } from "@/services/getEasyLeaderboard";
 import { getMediumLeaderboard } from "@/services/getMediumLeaderboard";
 import { getHardLeaderboard } from "@/services/getHardLeaderboard";
-import * as nations from '../data/flags.json'
+import * as nations from '../assets/nations/flags.json'
 import NavBar from "./NavBar.vue";
 export default {
   name: "LeaderBoard",

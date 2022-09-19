@@ -118,7 +118,7 @@
 <script>
 
 import NavBar from './NavBar.vue';
-import * as nations from '../data/flags.json'
+import * as nations from '../assets/nations/flags.json'
 import {register} from '../services/register.js'
 export default {
     name: "registerPage",

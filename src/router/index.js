@@ -2,7 +2,7 @@ import Router from 'vue-router';
 
 import PageNotFound from '../components/PageNotFound.vue';
 import LoginPage from '../components/LoginPage.vue'
-import GameComponent from '../components/GameComponent';
+import GameComponentEasy from '../components/GameComponentEasy';
 import RegisterPage from '../components/RegisterPage';
 import LeaderBoard from '../components/LeaderBoard'
 import GameComponentMedium from '../components/GameComponentMedium'
@@ -39,7 +39,7 @@ const router = new Router(
             {
                 name:'GameComponentEasy',
                 path:'/easyGame',
-                component:GameComponent
+                component:GameComponentEasy
             },
             {
                 name:'GameComponentMedium',
