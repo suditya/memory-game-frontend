@@ -117,9 +117,9 @@
 </template>
 <script>
 
-import axios from "axios";
 import NavBar from './NavBar.vue';
 import * as nations from '../data/flags.json'
+import {register} from '../services/register.js'
 export default {
     name: "registerPage",
     data() {
@@ -171,22 +171,16 @@ export default {
             try {
                 this.error = "";
                 if (this.checkInvalidEmail() || this.checkInvalidPass())
-                    this.error = "Invalid EmailId or Invalid Password or Confirm Password is not same as Password ";
+                    this.error = "Invalid Credentials, Please try again!";
 
                 if (this.error.length > 0) {   //if there is invalid data entered
                     this.popMessage();
                 }
                 else {
-                    const result = await axios.post(
-                        `${process.env.VUE_APP_BASE_URL}/user/register`,
-                        credentials,
-                        {
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        }
-                    );
-                    this.error=result.data.message;
+                    const result = await register(credentials); //calling register services
+                    // console.log(result, "register ");
+                    if(result.data.message)
+                    this.error="User with this email id already exist";
                     if (this.error) {
                         this.popMessage();
                     }
@@ -205,7 +199,7 @@ export default {
                 }
             }
             catch (err) {
-                this.error = err.message;
+                this.error="User with this email id already exist";
                 this.popMessage();
             }
 

@@ -3,12 +3,15 @@
     <NavBar />
     <div class="game-level">
       <div class="game-level-button" style="background-color:black; color:white ;">
-        <div class="level" style="display: contents;">🟢Easy</div>
+        <div class="level" style="display: contents;">Level 🟠Medium</div>
       </div>
     </div>
     <div class="game-container">
-      <div class="game-level">
-      </div>
+      <!-- <div class="game-level">
+        <div class="game-level-button" style="background-color:black; color:white ;">
+          <div class="level" style="display: contents;">🟠Medium</div>
+        </div>
+      </div> -->
       <div class="turns-class">
         <div class="turns">
           <button class="turn-button" style="cursor:default ; outline: none;"
@@ -39,7 +42,7 @@
     </div>
     <div v-else class="row boxing">
       <div v-for="(card, index) in memoryCards" :key="index" id="card-box"
-        class="col-md-3 col-sm-4 col-xs-4 mb-2 flip-container" :class="{
+        class="col-md-3 col-sm-3 col-xs-3 mb-2 flip-container" :class="{
           flipped: card.isFlipped,
           matched: card.isMatched,
           shake: animated,
@@ -80,7 +83,7 @@
 import "../assets/style.css";
 
 
-import { insertEasyLeaderboard } from "@/services/insertEasyLeaderboard";
+import { insertMediumLeaderboard } from "@/services/insertMediumLeaderboard";
 
 import NavBar from "./NavBar.vue";
 
@@ -108,17 +111,22 @@ export default {
       closePopup: false,
       animated: false,
       i: 0,
-      loadingShow: true,
       showWindow: false,
       gameStarter: true,
       isLoggedIn: true,
+      loadingShow: true,
       cards: [
         { name: "gorilla", emoji: "🦍" },
         { name: "cat", emoji: "🐈" },
         { name: "turtle", emoji: "🐢" },
         { name: "giraffe", emoji: "🦒" },
         { name: "monkey", emoji: "🐒" },
-        { name: "horse", emoji: "🐎" },
+        // { name: "horse", emoji: "🐎" },
+        // { name: "camel", emoji: "🐪" },
+        { name: "crocodile", emoji: "🐊" },
+        { name: "elephant", emoji: "🐘" },
+        // { name: "pig", emoji: "🐖" },
+        { name: "butterfly", emoji: "🦋" },
       ],
     };
   },
@@ -133,8 +141,11 @@ export default {
     setTimeout(() => {
       this.loadingShow = false;
     }, 800)
+    // this.test();
+
   },
   methods: {
+
     startGame() {
       setTimeout(() => {
         this.gameStarter = false;
@@ -186,7 +197,7 @@ export default {
             this.showWindow = true;
             const name = localStorage.getItem("userName");
 
-            if (name) this.insertEasyLeaderBoard();
+            if (name) this.insertLeaderBoard();
           }
         }, 400);
       } else {
@@ -203,6 +214,7 @@ export default {
       }
     },
     _startGame() {
+      this.loadingShow = false;
       this._tick();
       this.interval = setInterval(this._tick, 1000);
       this.start = true;
@@ -218,7 +230,7 @@ export default {
       this.totalTime.minutes++;
       this.totalTime.seconds = 0;
     },
-    async insertEasyLeaderBoard() {
+    async insertLeaderBoard() {
       const timeString = this.totalTime.minutes + ":" + this.totalTime.seconds;
       const email = localStorage.getItem("emailID");
       const name = localStorage.getItem("userName");
@@ -232,9 +244,8 @@ export default {
         countryEmoji,
       };
       try {
-        const result = await insertEasyLeaderboard(credentials);
-        console.log("inseted easy level");
-        console.log(result);
+        const result = await insertMediumLeaderboard(credentials);
+        console.log(result, "medium insert data")
       } catch (error) {
         console.log("error happend", error);
       }
@@ -313,6 +324,13 @@ export default {
   border-radius: 6px;
 }
 
+.loading {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  transition: all .8s linear;
+}
+
 .game-start {
   background-color: #f24848;
   color: white;
@@ -386,6 +404,7 @@ body {
   align-items: center;
 }
 
+
 .game-level-button {
   cursor: default;
   padding: 15px 10px;
@@ -415,8 +434,8 @@ body {
   line-height: 1;
   list-style: none;
   overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 10px;
+  padding-right: 10px;
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -426,6 +445,8 @@ body {
   white-space: nowrap;
   font-size: 22px;
 }
+
+
 
 .restart-button {
   background-color: #3bbb7f;
@@ -761,7 +782,7 @@ header {
 
 @media screen and (max-width: 800px) {
 
-  .game-container {
+  .game-container{
     display: flex;
     text-align: center;
     justify-content: space-evenly;
@@ -798,6 +819,8 @@ header {
     align-items: center;
   }
 
+  .game-level {}
+
   .turns {
     padding: 25px 0;
   }
@@ -811,7 +834,6 @@ header {
     color: white;
     font-weight: 900;
     font-size: 20px;
-    margin-right: 5px;
   }
 
 

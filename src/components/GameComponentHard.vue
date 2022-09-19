@@ -3,12 +3,10 @@
     <NavBar />
     <div class="game-level">
       <div class="game-level-button" style="background-color:black; color:white ;">
-        <div class="level" style="display: contents;">🟢Easy</div>
+        <div class="level" style="display: contents;">🔴Hard</div>
       </div>
     </div>
     <div class="game-container">
-      <div class="game-level">
-      </div>
       <div class="turns-class">
         <div class="turns">
           <button class="turn-button" style="cursor:default ; outline: none;"
@@ -30,7 +28,7 @@
         </button>
       </div>
     </div>
-    <div v-show="isLoggedIn == false && !closePopup " class="popup-msg">
+    <div v-show="isLoggedIn == false && !closePopup" class="popup-msg">
       <button class="close" @click="closePopup = true">X</button>
       <p>Please login yourself to save your scores</p>
     </div>
@@ -39,7 +37,7 @@
     </div>
     <div v-else class="row boxing">
       <div v-for="(card, index) in memoryCards" :key="index" id="card-box"
-        class="col-md-3 col-sm-4 col-xs-4 mb-2 flip-container" :class="{
+        class="col-lg-2 col-md-3 col-sm-3 col-xs-4 mb-2 flip-container" :class="{
           flipped: card.isFlipped,
           matched: card.isMatched,
           shake: animated,
@@ -51,6 +49,8 @@
         <div class="memorycard">
           <div class="front"></div>
           <div class="back">
+            <div class="game-level">
+            </div>
             <span class="mood-emoji">{{ card.emoji }}</span>
           </div>
         </div>
@@ -80,7 +80,7 @@
 import "../assets/style.css";
 
 
-import { insertEasyLeaderboard } from "@/services/insertEasyLeaderboard";
+import { insertHardLeaderboard } from "@/services/insertHardLeaderboard";
 
 import NavBar from "./NavBar.vue";
 
@@ -108,10 +108,10 @@ export default {
       closePopup: false,
       animated: false,
       i: 0,
-      loadingShow: true,
       showWindow: false,
       gameStarter: true,
       isLoggedIn: true,
+      loadingShow: true,
       cards: [
         { name: "gorilla", emoji: "🦍" },
         { name: "cat", emoji: "🐈" },
@@ -119,11 +119,20 @@ export default {
         { name: "giraffe", emoji: "🦒" },
         { name: "monkey", emoji: "🐒" },
         { name: "horse", emoji: "🐎" },
+        // { name: "camel", emoji: "🦢" },
+        // { name: "goat", emoji: "🐐" },
+        { name: "elephant", emoji: "🐘" },
+        { name: "parrot", emoji: "🦜" },
+        { name: "crocodile", emoji: "🐊" },
+        { name: "snake", emoji: "🐍" },
+        { name: "bee", emoji: "🐝" },
+        { name: "butterfly", emoji: "🦋" },
       ],
     };
   },
   created() {
     this.reset();
+
     let user = localStorage.getItem("userName");
     if (user) {
       this.isLoggedIn = true;
@@ -140,6 +149,7 @@ export default {
         this.gameStarter = false;
       }, 300);
     },
+
     closeWindow() {
       this.showWindow = false;
     },
@@ -186,9 +196,9 @@ export default {
             this.showWindow = true;
             const name = localStorage.getItem("userName");
 
-            if (name) this.insertEasyLeaderBoard();
+            if (name) this.insertLeaderBoard();
           }
-        }, 400);
+        }, 800);
       } else {
         setTimeout(() => {
           this.animated = true;
@@ -218,7 +228,7 @@ export default {
       this.totalTime.minutes++;
       this.totalTime.seconds = 0;
     },
-    async insertEasyLeaderBoard() {
+    async insertLeaderBoard() {
       const timeString = this.totalTime.minutes + ":" + this.totalTime.seconds;
       const email = localStorage.getItem("emailID");
       const name = localStorage.getItem("userName");
@@ -232,9 +242,7 @@ export default {
         countryEmoji,
       };
       try {
-        const result = await insertEasyLeaderboard(credentials);
-        console.log("inseted easy level");
-        console.log(result);
+        const result = await insertHardLeaderboard(credentials);
       } catch (error) {
         console.log("error happend", error);
       }
@@ -606,7 +614,7 @@ header {
 }
 
 .boxing {
-  width: 45%;
+  width: 80%;
   margin: 20px auto;
   border: 1px solid #f0f0f0;
   border-radius: 12px;
@@ -730,19 +738,19 @@ header {
 
 @media screen and (max-width: 1600px) {
   .boxing {
-    width: 50%;
+    width: 80%;
   }
 }
 
 @media screen and (max-width: 1400px) {
   .boxing {
-    width: 70%;
+    width: 95%;
   }
 }
 
 @media screen and (max-width: 1050px) {
   .boxing {
-    width: 90%;
+    width: 100%;
   }
 
   .start-button,
@@ -773,7 +781,6 @@ header {
   .turn-button,
   .totalTime-button,
   .restart-button {
-
     height: 50px;
     padding-left: 5px;
     padding-right: 5px;
@@ -811,7 +818,6 @@ header {
     color: white;
     font-weight: 900;
     font-size: 20px;
-    margin-right: 5px;
   }
 
 

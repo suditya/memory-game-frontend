@@ -4,9 +4,27 @@
     <div class="leader">
       <h1 class="header">🏆 Global Leader Board 🏆</h1>
     </div>
+    <div class="game-level">
+      <div class="level-heading">
+        <h4 style="text-align:center ; font-weight: 700;"> Game Level : 
+          <span v-show="gameLevel=='Easy'" class="easy">🟢Easy</span>
+          <span v-show="gameLevel=='Medium'" class="medium">🟠Medium</span>
+          <span v-show="gameLevel=='Hard'" class="hard">🔴Hard</span> 
+        </h4>
+      </div>
+      <div class="selection"><select v-model="gameLevel" class="select-level" style=" margin-left:1%" name="" id="">
+        <option value="Easy" selected>select level
+        </option>
+          <option  value="Easy">🟢Easy</option>
+          <option value="Medium">🟠Medium</option>
+          <option value="Hard">🔴Hard</option>
+        </select></div>
+
+    </div>
+    <!-- {{filteredPlayersRanking}} -->
     <div class="search-wrapper">
       <select v-model="searchCriteria" class="searchCriteria" style="width:32%; margin-right:1%" name="" id="">
-        <option value="" disabled selected>search
+        <option value="All" selected>search players
         </option>
         <option value="All">All</option>
         <option value="search by name">search by name</option>
@@ -30,10 +48,10 @@
           <li class="">
             <button type="button" class="page-link" v-if="page != 1" @click="page--"> Previous </button>
           </li>
-          <li class="">
-            <button type="button" :key="pageNumber" class="page-link" v-for="pageNumber in pages.slice(page-1, page+3)"
+          <!-- <li class="">
+            <button type="button" :key="pageNumber" class="page-link" v-for="pageNumber in pages.slice(page-1, page+2)"
               @click="page = pageNumber"> {{pageNumber}} </button>
-          </li>
+          </li> -->
           <li class="">
             <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Next </button>
           </li>
@@ -76,8 +94,10 @@
 </template>
 
 <script>
-/*eslint-disable */
-import axios from "axios";
+// eslint-disable 
+import { getEasyLeaderboard } from "@/services/getEasyLeaderboard";
+import { getMediumLeaderboard } from "@/services/getMediumLeaderboard";
+import { getHardLeaderboard } from "@/services/getHardLeaderboard";
 import * as nations from '../data/flags.json'
 import NavBar from "./NavBar.vue";
 export default {
@@ -97,7 +117,11 @@ export default {
       pages: [],
       numberOfPlayers: 0,
       rank: 0,
-      loadingShow: true
+      loadingShow: true,
+      gameLevel: "Easy",
+      easyResult: [],
+      mediumResult: [],
+      hardResult: []
     }
   },
   methods:
@@ -106,14 +130,20 @@ export default {
     async getPlayersRanking() {
       try {
 
-        const result = await axios.get(
-          `${process.env.VUE_APP_BASE_URL}/user/getLeaderBoard`
-        );
+        this.easyResult = await getEasyLeaderboard();
+
+        this.mediumResult = await getMediumLeaderboard();
+        this.hardResult = await getHardLeaderboard();
         setTimeout(() => {
           this.loadingShow = false;
-        }, 1400)
-        this.playersRanking = result.data;
-        this.playersRanking.sort((a, b) => a.lowScore - b.lowScore);
+        }, 1000)
+        // this.filteredPlayersRanking()
+        // console.log(easyR)
+        this.easyResult.data.sort((a, b) => a.lowScore - b.lowScore);
+        this.playersRanking = this.easyResult.data;
+        this.mediumResult.data.sort((a, b) => a.lowScore - b.lowScore);
+        this.hardResult.data.sort((a, b) => a.lowScore - b.lowScore);
+
 
       }
       catch (err) {
@@ -137,17 +167,19 @@ export default {
     getRank(index) {
       return index + 1 + (this.perPage * (this.page - 1))
     },
-  },
-  computed: {
-    showPlayers() {
-      return this.paginate();
-    },
-    filteredPlayersRanking() {
-      this.loggedinPlayer = localStorage.getItem('userName');
+    filterByLevel() {
+      let players;
+      
       let choosenCountryEmoji = this.choosenCountry.split("|")[1];
-      if (this.searchCriteria == "search by name") {
 
-        let res = this.playersRanking.filter(player => {
+      if (this.gameLevel == "Easy") players = this.easyResult.data;
+      else if (this.gameLevel == "Medium") players = this.mediumResult.data;
+      else players = this.hardResult.data;
+
+
+      if (this.searchCriteria == "search by name" && this.search) {
+
+        let res = players.filter(player => {
           return (player.name.toLowerCase().includes(this.search.toLowerCase()));
         })
         this.numberOfPlayers = res.length;
@@ -157,7 +189,7 @@ export default {
       }
       else if (this.searchCriteria == "search by country" && choosenCountryEmoji) {
 
-        let res = this.playersRanking.filter(player => {
+        let res = players.filter(player => {
           return (player.countryEmoji.includes(choosenCountryEmoji));
         })
         this.numberOfPlayers = res.length;
@@ -167,7 +199,7 @@ export default {
       }
       else {
 
-        let res = this.playersRanking;
+        let res = players;
         this.numberOfPlayers = res.length;
         this.setPages();
         return res;
@@ -175,9 +207,17 @@ export default {
       }
     },
 
-
+  },
+  computed: {
+    showPlayers() {
+      return this.paginate();
+    },
+    filteredPlayersRanking() {
+      return this.filterByLevel()
+    }
   },
   created() {
+    this.loggedinPlayer = localStorage.getItem('userName');
     this.getPlayersRanking();
     this.filteredPlayersRanking();
   },
@@ -196,6 +236,37 @@ export default {
   font-family: 'Open Sans', sans-serif;
 }
 
+.game-level {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.select-level {
+  padding: 8px;
+  border-radius: 16px;
+}
+
+.level-heading {
+  margin-right: 20px;
+}
+.easy, .medium, .hard 
+{
+  padding: 0px 8px;
+  border-radius: 10px;
+  background-color: white;
+}
+.easy
+{
+  color: green;
+}
+.medium
+{
+  color: orange;
+}
+.hard{
+  color: red;
+}
 .loading {
   display: flex;
   align-content: center;

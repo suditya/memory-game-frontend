@@ -8,7 +8,7 @@
             <h1 class="heading">Login</h1>
             <form @submit.prevent="login()" class="form-container">
                 <hr>
-                
+
                 <div v-show="errorShow == true" class="popup-msg">
                     
                     <h2>Login Failed</h2>
@@ -62,8 +62,9 @@
 </template>
 <script>
 
-import axios from "axios";
 import NavBar from './NavBar.vue';
+import {Signin} from '../services/signin'
+import {savePlayerDetails} from '../services/savePlayerDetails'
 
 export default {
     name: "loginPage",
@@ -101,23 +102,12 @@ export default {
             const credentials = {
                 email: this.email,
                 password: this.password,
-            };
-            
-
-            
+            }; 
             try {
-                
-                const result = await axios.post(
-                    `${process.env.VUE_APP_BASE_URL}/user/login`,
-                    credentials,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-                
-                this.error = result.data.message;
+                const result = await Signin(credentials);
+                // console.log(result);
+                // console.log(result.data.message);
+                this.error = "Credentials didn't matched, make sure you entered right credentials";
 
                 if (result.data.message) {
                     
@@ -127,21 +117,20 @@ export default {
                     await this.savePlayerDetails();
                     this.showSucccessMessage();
                     setTimeout(() => {
-                        this.$router.push({ path: "/" });
+                        this.$router.push({ path: "/level" });
                     }, 1500)
                 }
             }
             catch (err) {
                 this.showErrorMessage()
-                this.error = err.message;
+                this.error = "Credentials didn't matched, make sure you entered right credentials";
             }
 
         },
         async savePlayerDetails() {
             try {
-                const result = await axios.get(
-                    `${process.env.VUE_APP_BASE_URL}/user/getPlayerDetails/${this.email}`
-                );
+                const result = await savePlayerDetails(this.email);
+                console.log(result);
                 localStorage.setItem("userName", result.data.name)
                 localStorage.setItem("countryEmoji", result.data.countryEmoji)
 

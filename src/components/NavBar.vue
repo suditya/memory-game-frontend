@@ -5,8 +5,11 @@
         <router-link to="/" class="link-plain left-item" style="margin-right:30px">
           <div>Game</div>
         </router-link>
-        <router-link to="/leaderboard" class="link-plain left-item">
+        <router-link to="/leaderboard" class="link-plain left-item" style="margin-right:30px">
           <div>LeaderBoard</div>
+        </router-link>
+        <router-link to="/level" class="link-plain left-item">
+          <div>Level</div>
         </router-link>
       </div>
       <div class="right list-unstyled">
@@ -37,6 +40,9 @@
       <button class="nav-close-button" @click="hamContent = (1^hamContent)">X</button>
       <router-link to="/" class="nav-link">
         Game
+      </router-link>
+      <router-link to="/level" class="nav-link">
+        Level
       </router-link>
       <router-link to="/leaderboard" class="nav-link">
         LeaderBoard
@@ -278,15 +284,9 @@ export default {
   }
 
   .nav-close-button:hover {
-    font-size: 47px;
     padding: 0px 25px;
     border-radius: 53px;
-    /* border: 1px solid white; */
-    /* border: none; */
-    top: -8%;
     background-color: #49505712;
-    right: -33%;
-    transition: all .4s ease-in-out;
   }
 
   .start-button {
@@ -305,7 +305,7 @@ export default {
     transition: all .4s ease-in-out;
     display: flex;
     top: 0;
-    height: 44%;
+    height: 64%;
     width: 48%;
     font-weight: 800;
     border-bottom-left-radius: 15px;
