@@ -693,15 +693,15 @@ header {
 
 .popup {
   height: 37%;
-  width: 73%;
+  width: 33%;
   text-align: center;
   border-radius: 15px;
   margin: auto auto;
   background-color: rgba(230, 230, 250, 0.95);
   position: absolute;
-  left: 13.2%;
+  left: 33.2%;
   z-index: 1000;
-  top: 28%;
+  top: 42%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -813,14 +813,31 @@ header {
     padding: 0 3px;
   }
 
+
+  .popup {
+    height: 37%;
+    width: 73%;
+    text-align: center;
+    border-radius: 15px;
+    margin: auto auto;
+    background-color: rgba(230, 230, 250, 0.95);
+    position: absolute;
+    left: 13.2%;
+    z-index: 1000;
+    top: 56%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.8s;
+  }
+
   .restart-button {
     background-color: #3bbb7f;
     color: white;
     font-weight: 900;
     font-size: 20px;
   }
-
-
 
 
   .popup-msg {
